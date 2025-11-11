@@ -1,11 +1,17 @@
-def printBottomLine(totalWidth: Int, boxesPerRow: Int): String = {
-  val boxWidth = totalWidth / boxesPerRow
-  val horizontal = ("+" + "-" * boxWidth) * boxesPerRow + "+"
-  horizontal
-}
-printBottomLine(totalWidth = 5, boxesPerRow = 3)
-printBottomLine(totalWidth = 10, boxesPerRow = 5)
-printBottomLine(totalWidth = 20, boxesPerRow = 3)
-printBottomLine(totalWidth = 13, boxesPerRow = 3)
+private def printHexagon(width: Int): String = {
+  val sb = new StringBuilder
+  val height = width / 2  // approximate height for a hexagon
+  // Top
+  for (i <- 0 until height) {
+    val spaces = " " * (height - i)
+    val middle = "-" * (width + i * 2)
+    sb.append(spaces + "/" + middle + "\\\n")
+  }
+  // Bottom
+  for (i <- (0 until height).reverse) {
+    val spaces = " " * (height - i)
+    val middle = "-" * (width + i * 2)
+    sb.append(spaces + "\\" + middle + "/\n")
+  }
 
 
