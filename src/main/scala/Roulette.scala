@@ -1,5 +1,3 @@
-import scala.io.StdIn.readInt
-
 object Roulette {
   def main(args: Array[String]): Unit = {
     var continue = true
@@ -13,7 +11,7 @@ object Roulette {
     math.max(2, ((totalWidth * height).toDouble / (totalWidth + height)).round.toInt)
   }
 
-  def rouletteRound(): Boolean = {
+  private def rouletteRound(): Boolean = {
     val randomInt = scala.util.Random.nextInt(36)
     println(printTable(11, 1, None)) // initial table
     val continue = placeBet(randomInt)
