@@ -1,6 +1,10 @@
+import scala.io.StdIn.readInt
+
 object Roulette {
   def main(args: Array[String]): Unit = {
-    print(printTable(11, 1))  // (11*n+(n-1),n)
+    while (true) {
+      rouletteRound()
+    }
   }
 
   private def computeHexOffset(totalWidth: Int, height: Int): Int = {
@@ -8,13 +12,27 @@ object Roulette {
     math.max(2, math.round(totalWidth.toDouble * height / (totalWidth + height)).toInt)
   }
 
-  private def printTable(totalWidth: Int, height: Int): String = {
+  def rouletteRound(): Unit = {
+    val randomInt = scala.util.Random.nextInt(36)
+    println(printTable(11, 1, None))// (11*n+(n-1),n)
+    placeBet(randomInt)
+    println(printTable(11, 1, Some(randomInt)))// (11*n+(n-1),n)
+  }
+
+  private def placeBet(randomInt: Int) :Unit = {
+    print("Place a Bet: ")
+    val bet = readInt()
+    if (bet == randomInt) println("Win")
+    else println("Lose")
+  }
+
+  private def printTable(totalWidth: Int, height: Int,randomInt: Option[Int]): String = {
     val bigBoxHeight = height
     val smallBoxHeight = height
 
     val hexOffset = computeHexOffset(totalWidth, height)
     val top = " " * hexOffset + printLine(totalWidth, 3)+ "\n"
-    val hexagon = printHexagon(totalWidth, height)
+    val hexagon = printHexagon(totalWidth, height, randomInt)
 
     val firstRow = printBoxRow(totalWidth, bigBoxHeight, 1, includeBottom = false, rowIndex = 0, offset = hexOffset)
     val middleRows = (1 until 13).map(i =>
@@ -25,7 +43,7 @@ object Roulette {
     (Seq(top+hexagon, firstRow) ++ middleRows :+ bottom).mkString("\n")
   }
 
-  private def printHexagon(totalWidth: Int, height: Int): String = {
+  private def printHexagon(totalWidth: Int, height: Int, randomInt: Option[Int]): String = {
     val hexHeight = height
     val hexInnerWidth = totalWidth + 2  // width of flat part inside hex
     val maxInner = hexInnerWidth + 2 * hexHeight
@@ -37,9 +55,8 @@ object Roulette {
       spaces + "/" + inner + "\\"
     }
 
-    // Middle flat section
-    val randomInt = scala.util.Random.nextInt(36)
-    val randStrRaw = randomInt.toString
+    // Middle flat section with RandNum
+    val randStrRaw = randomInt.map(_.toString).getOrElse(" ")
     val randStr = if (randStrRaw.length > maxInner) randStrRaw.take(maxInner) else randStrRaw
 
     val middleHeight = math.max(hexHeight / 2, 1)
