@@ -2,28 +2,36 @@ import scala.io.StdIn.readInt
 
 object Roulette {
   def main(args: Array[String]): Unit = {
-    while (true) {
-      rouletteRound()
+    var continue = true
+    while (continue) {
+      continue = rouletteRound()
     }
   }
 
   private def computeHexOffset(totalWidth: Int, height: Int): Int = {
     // offset = round(totalWidth * height / (totalWidth + height)), at least 2
-    math.max(2, math.round(totalWidth.toDouble * height / (totalWidth + height)).toInt)
+    math.max(2, ((totalWidth * height).toDouble / (totalWidth + height)).round.toInt)
   }
 
-  def rouletteRound(): Unit = {
+  def rouletteRound(): Boolean = {
     val randomInt = scala.util.Random.nextInt(36)
-    println(printTable(11, 1, None))// (11*n+(n-1),n)
-    placeBet(randomInt)
-    println(printTable(11, 1, Some(randomInt)))// (11*n+(n-1),n)
+    println(printTable(11, 1, None)) // initial table
+    val continue = placeBet(randomInt)
+    if (continue) {
+      println(printTable(11, 1, Some(randomInt)))
+    }
+
+    continue
   }
 
-  private def placeBet(randomInt: Int) :Unit = {
-    print("Place a Bet: ")
-    val bet = readInt()
-    if (bet == randomInt) println("Win")
-    else println("Lose")
+  private def placeBet(randomInt: Int): Boolean = {
+    print("Place a Bet (100 to exit): ")
+    val bet = scala.io.StdIn.readInt()
+    if (bet == 100) false            // stop
+    else {
+      if (bet == randomInt) println("Win") else println("Lose")
+      true                            // continue
+    }
   }
 
   private def printTable(totalWidth: Int, height: Int,randomInt: Option[Int]): String = {
