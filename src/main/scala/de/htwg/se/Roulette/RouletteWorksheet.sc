@@ -1,6 +1,6 @@
-private def printHexagon(width: Int): String = {
+private def printHexagon(width: Int): Unit = {
   val sb = new StringBuilder
-  val height = width / 2  // approximate height for a hexagon
+  val height = width / 2 // approximate height for a hexagon
   // Top
   for (i <- 0 until height) {
     val spaces = " " * (height - i)
@@ -13,5 +13,6 @@ private def printHexagon(width: Int): String = {
     val middle = "-" * (width + i * 2)
     sb.append(spaces + "\\" + middle + "/\n")
   }
+}
 
 
