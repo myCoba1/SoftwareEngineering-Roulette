@@ -1,4 +1,6 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.aview
+
+import de.htwg.se.Roulette.model.PrintTable
 
 object RouletteRound {
   def rouletteRound(): Boolean = {

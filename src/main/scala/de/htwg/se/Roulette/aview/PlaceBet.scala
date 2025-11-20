@@ -1,4 +1,4 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.aview
 
 object PlaceBet {
   def placeBet(randomInt: Int): Boolean = {
