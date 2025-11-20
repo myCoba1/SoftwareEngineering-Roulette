@@ -11,10 +11,13 @@ object PrintBoxRow {
     val numbers = (startNum until startNum + boxesPerRow).toList
 
     val numberLine = numbers.map { n =>
-      val str = n.toString
-      val padLeft = (boxWidth - str.length) / 2
-      val padRight = boxWidth - str.length - padLeft
-      "|" + " " * padLeft + str + " " * padRight
+      val raw = n.toString
+      val color = RedBlack.colorOf(n)
+      val availForNumber = math.max(0, boxWidth - 1) // leave 1 char for color
+      val str = if (raw.length > availForNumber) raw.take(availForNumber) else raw
+      val padLeft = (availForNumber - str.length) / 2
+      val padRight = availForNumber - str.length - padLeft
+      "|" + " " * padLeft + str + " " * padRight + color
     }.mkString("")
     val numberLineWithOffset = " " * offset + numberLine + "|"
 
