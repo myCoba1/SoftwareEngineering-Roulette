@@ -1,10 +1,10 @@
 package de.htwg.se.Roulette.aview
 
-import de.htwg.se.Roulette.model.RedBlack
-import de.htwg.se.Roulette.model.Thirds
+import de.htwg.se.Roulette.model.{RedBlack, Thirds}
+import de.htwg.se.Roulette.controller.GameController
 
 object PlaceBet {
-  def placeBet(randomInt: Int): Boolean = {
+  def placeBet(controller: GameController, randomInt: Int): Boolean = {
     def readInput(): Option[Either[Int,Char]] = {
       print("Place a Bet (number 0-36, or color R | B, or third 1/3 | 2/3 | 3/3: ")
       val line = scala.io.StdIn.readLine()
@@ -35,14 +35,17 @@ object PlaceBet {
     result.get match {
       case Left(n) =>
         if (n == randomInt) println("Win") else println("Lose")
+        controller.placeBet(n, randomInt)
 
       case Right(t) if t == '1' || t == '2' || t == '3' =>
         val actualThird = Thirds.thirdOf(randomInt)
         if (actualThird == s"$t/3") println("Win") else println("Lose")
+        controller.placeBet(t, randomInt)
 
       case Right(c) =>
         val actualColor = RedBlack.colorOf(randomInt) // 'R', 'B' or 'G'
         if (actualColor == c) println("Win") else println("Lose")
+        controller.placeBet(c, randomInt)
     }
 
     true
