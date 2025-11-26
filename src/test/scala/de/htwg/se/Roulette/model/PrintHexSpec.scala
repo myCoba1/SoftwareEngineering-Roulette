@@ -108,10 +108,23 @@ class PrintHexSpec extends AnyWordSpec with Matchers {
       val content = middleLine.stripPrefix("|").stripSuffix("|").trim
       content shouldBe ""
     }
+    "truncate randStrRaw when longer than maxInner" in {
+      val randStrRaw = "abcdefghij"
+      val maxInner = 5
 
+      val randStr = if (randStrRaw.length > maxInner) randStrRaw.take(maxInner) else randStrRaw
 
+      randStr shouldEqual "abcde"
+    }
 
+    "keep randStrRaw as is when shorter than or equal to maxInner" in {
+      val randStrRaw = "abc"
+      val maxInner = 5
 
+      val randStr = if (randStrRaw.length > maxInner) randStrRaw.take(maxInner) else randStrRaw
+
+      randStr shouldEqual "abc"
+    }
   }
 
 }
