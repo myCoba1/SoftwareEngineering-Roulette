@@ -9,3 +9,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Roulette"
   )
+
+coverageEnabled := true
+coverageFailOnMinimum := false
+coverageMinimum := 0
