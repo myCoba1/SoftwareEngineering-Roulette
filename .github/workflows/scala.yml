@@ -24,6 +24,6 @@ jobs:
         uses: sbt/setup-sbt@v1
 
       - name: Run tests and Submit to Coveralls
-        run: sbt "clean coverage test coveralls"
+        run: sbt clean coverage test coveralls
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
