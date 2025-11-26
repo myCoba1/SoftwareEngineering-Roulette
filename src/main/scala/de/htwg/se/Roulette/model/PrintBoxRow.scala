@@ -2,7 +2,7 @@ package de.htwg.se.Roulette.model
 
 object PrintBoxRow {
   def printBoxRow(totalWidth: Int, boxHeight: Int, boxesPerRow: Int, includeBottom: Boolean,
-                          rowIndex: Int, offset: Int = 0): String = {
+                  rowIndex: Int, offset: Int = 0): String = {
     val boxWidth = totalWidth / boxesPerRow
     val horizontal = " " * offset + (("+" + "-" * boxWidth) * boxesPerRow + "+")
     val middle = " " * offset + (("|" + " " * boxWidth) * boxesPerRow + "|")
