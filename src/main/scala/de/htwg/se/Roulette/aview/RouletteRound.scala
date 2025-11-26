@@ -6,8 +6,8 @@ import de.htwg.se.Roulette.controller.GameController
 object RouletteRound {
   def rouletteRound(controller: GameController): Boolean = {
     val randomInt = scala.util.Random.nextInt(36)
-    val emptyTable = PrintTable.printTable(23, 2, None) // empty table
-    val trueTable = PrintTable.printTable(23, 2, Some(randomInt)) // table with number
+    val emptyTable = PrintTable.printTable(11, 1, None) // empty table
+    val trueTable = PrintTable.printTable(11, 1, Some(randomInt)) // table with number
     println(emptyTable)
     val bet = PlaceBet.placeBet(controller, randomInt)
     if (bet) {

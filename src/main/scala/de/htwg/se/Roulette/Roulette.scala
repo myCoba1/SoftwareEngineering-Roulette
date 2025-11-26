@@ -1,6 +1,7 @@
-package de.htwg.se.Roulette.controller
+package de.htwg.se.Roulette
 
-import de.htwg.se.Roulette.aview.{RouletteRound, ConsoleObserver}
+import de.htwg.se.Roulette.aview.{ConsoleObserver, RouletteRound}
+import de.htwg.se.Roulette.controller.GameController
 
 object Roulette {
   def main(args: Array[String]): Unit = {
