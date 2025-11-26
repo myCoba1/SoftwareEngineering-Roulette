@@ -9,5 +9,3 @@ lazy val root = (project in file("."))
   .settings(
     name := "Roulette"
   )
-
-Test / scalacOptions += "-coverage-out"
