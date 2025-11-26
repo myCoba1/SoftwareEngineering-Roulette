@@ -108,22 +108,30 @@ class PrintHexSpec extends AnyWordSpec with Matchers {
       val content = middleLine.stripPrefix("|").stripSuffix("|").trim
       content shouldBe ""
     }
-    "truncate randStrRaw when longer than maxInner" in {
-      val randStrRaw = "abcdefghij"
-      val maxInner = 5
+    "truncate number in printHex when longer than maxInner" in {
+      val totalWidth = 2
+      val height = 1
+      val longNumber = 123456
+      val maxInner = totalWidth + 2 + 2 * height
 
-      val randStr = if (randStrRaw.length > maxInner) randStrRaw.take(maxInner) else randStrRaw
+      val output = PrintHex.printHex(totalWidth, height, Some(longNumber))
+      val middleLine = output.linesIterator.toSeq(1) // middle line index for height=1
+      val numberInHex = middleLine.trim.stripPrefix("|").stripSuffix("|").trim
 
-      randStr shouldEqual "abcde"
+      numberInHex shouldEqual longNumber.toString.take(maxInner)
     }
 
-    "keep randStrRaw as is when shorter than or equal to maxInner" in {
-      val randStrRaw = "abc"
-      val maxInner = 5
+    "keep number in printHex when shorter than maxInner" in {
+      val totalWidth = 3
+      val height = 2
+      val number = 42
+      val maxInner = totalWidth + 2 + 2 * height
 
-      val randStr = if (randStrRaw.length > maxInner) randStrRaw.take(maxInner) else randStrRaw
+      val output = PrintHex.printHex(totalWidth, height, Some(number))
+      val middleLine = output.linesIterator.toSeq(height + (math.max(height / 2,1)/2))
+      val numberInHex = middleLine.trim.stripPrefix("|").stripSuffix("|").trim
 
-      randStr shouldEqual "abc"
+      numberInHex shouldEqual number.toString
     }
   }
 
