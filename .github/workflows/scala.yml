@@ -23,14 +23,7 @@ jobs:
       - name: Set up sbt
         uses: sbt/setup-sbt@v1
 
-      - name: Run tests with coverage
-        # Note: 'sbt coverageReport' is redundant here as 'sbt coveralls' runs it,
-        # but it's fine for verification. We run clean, coverage, and test.
-        run: sbt clean coverage test
-
-      - name: Submit Coverage to Coveralls
-        # This step runs the sbt plugin command
-        run: sbt coveralls
+      - name: Run tests and Submit to Coveralls
+        run: sbt "clean coverage test coveralls"
         env:
-          # This is the CRITICAL line. It passes the secret to the sbt command.
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
