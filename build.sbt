@@ -9,3 +9,8 @@ lazy val root = (project in file("."))
   .settings(
     name := "Roulette"
   )
+
+coverageEnabled := true
+coverageMinimum := 0
+coverageFailOnMinimum := false
+Test / scalacOptions += "-coverage-out" // required for Scala 3 instrumentation
