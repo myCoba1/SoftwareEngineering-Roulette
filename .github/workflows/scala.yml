@@ -24,10 +24,13 @@ jobs:
         uses: sbt/setup-sbt@v1
 
       - name: Run tests with coverage
-        run: sbt clean coverage test coverageReport
+        # Note: 'sbt coverageReport' is redundant here as 'sbt coveralls' runs it,
+        # but it's fine for verification. We run clean, coverage, and test.
+        run: sbt clean coverage test
 
-      - name: Upload to Coveralls
-        uses: coverallsapp/github-action@v2.3.6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: target/scala-*/scoverage-report/scoverage.xml
+      - name: Submit Coverage to Coveralls
+        # This step runs the sbt plugin command
+        run: sbt coveralls
+        env:
+          # This is the CRITICAL line. It passes the secret to the sbt command.
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
