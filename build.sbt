@@ -12,4 +12,4 @@ lazy val root = (project in file("."))
 
 coverageEnabled := true
 coverageFailOnMinimum := false
-coverageMinimum := 0
+coverageMinimumStmtTotal := 0
