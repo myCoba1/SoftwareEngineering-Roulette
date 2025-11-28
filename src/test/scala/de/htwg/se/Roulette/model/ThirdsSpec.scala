@@ -34,4 +34,55 @@ class ThirdsSpec extends AnyWordSpec with Matchers {
       Thirds.thirdOf(100) shouldBe "None"
     }
   }
+
+  "A FirstThirdBet" should {
+    val bet = FirstThirdBet()
+    "win for numbers in the first third" in {
+      (1 to 12).foreach { n =>
+        bet.isWinningBet(n) shouldBe true
+      }
+    }
+    "lose for numbers outside the first third" in {
+      ((13 to 36).toSet + 0).foreach { n =>
+        bet.isWinningBet(n) shouldBe false
+      }
+    }
+    "have a correct string representation" in {
+      bet.toString shouldBe "1 st 12"
+    }
+  }
+
+  "A SecondThirdBet" should {
+    val bet = SecondThirdBet()
+    "win for numbers in the second third" in {
+      (13 to 24).foreach { n =>
+        bet.isWinningBet(n) shouldBe true
+      }
+    }
+    "lose for numbers outside the second third" in {
+      ((1 to 12).toSet ++ (25 to 36).toSet + 0).foreach { n =>
+        bet.isWinningBet(n) shouldBe false
+      }
+    }
+    "have a correct string representation" in {
+      bet.toString shouldBe "2 nd 12"
+    }
+  }
+
+  "A ThirdThirdBet" should {
+    val bet = ThirdThirdBet()
+    "win for numbers in the third third" in {
+      (25 to 36).foreach { n =>
+        bet.isWinningBet(n) shouldBe true
+      }
+    }
+    "lose for numbers outside the third third" in {
+      ((1 to 24).toSet + 0).foreach { n =>
+        bet.isWinningBet(n) shouldBe false
+      }
+    }
+    "have a correct string representation" in {
+      bet.toString shouldBe "3 rd 12"
+    }
+  }
 }

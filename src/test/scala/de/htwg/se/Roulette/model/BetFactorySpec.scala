@@ -61,4 +61,22 @@ class BetFactorySpec extends AnyWordSpec with Matchers {
       bets should contain (BlackBet())
     }
   }
+
+  "A NumberBet" should {
+    val number = 25
+    val bet = NumberBet(number)
+
+    "win if the winning number is the same" in {
+      bet.isWinningBet(number) should be(true)
+    }
+
+    "lose if the winning number is different" in {
+      bet.isWinningBet(number + 1) should be(false)
+      bet.isWinningBet(0) should be(false)
+    }
+
+    "have a correct string representation" in {
+      bet.toString shouldBe number.toString
+    }
+  }
 }
