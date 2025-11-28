@@ -30,7 +30,7 @@ object PrintTable {
     val redBox = WordBox.wordBox("red")
     val side = blackBox ++ Vector(" ") ++ redBox
 
-    val sideOffset = (tableBlockLines.length - side.length) / 2
+    val sideOffset = (tableBlockLines.length - side.length) / 2 + 2
 
     val centeredSide =
       Vector.fill(math.max(0, sideOffset))("") ++
@@ -56,8 +56,8 @@ object PrintTable {
     val leftWidth = paddedTable.map(_.length).maxOption.getOrElse(0)
     val midWidth = paddedThirds.map(_.length).maxOption.getOrElse(0)
 
-    val tableWithBothSides = (0 until maxLines).map { i =>
-      val left = paddedTable(i)
+    val tableWithBothSides = (0 until maxLines).map { i =>      
+      val left = paddedTable(i)      
       val mid = paddedThirds(i)
       val right = paddedSide(i)
 

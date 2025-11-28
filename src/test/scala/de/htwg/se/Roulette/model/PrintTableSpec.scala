@@ -64,5 +64,13 @@ class PrintTableSpec extends AnyWordSpec with Matchers {
       result.endsWith("\n") shouldBe false
     }
 
+    "correctly pad and align table, thirds, and side boxes" in {
+      val result = PrintTable.printTable(20, 3, None)
+
+      result should include regex "\\|\\s+2\\s+B"
+      result should include ("| 1 |")
+      result should include ("| s |")
+      result should include ("| t |")
+    }
   }
 }
