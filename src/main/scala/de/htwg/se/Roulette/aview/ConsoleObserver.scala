@@ -6,7 +6,7 @@ class ConsoleObserver(controller: GameController) extends Observer[ControllerEve
   controller.addObserver(this)
   override def update(event: ControllerEvent): Unit =
     event match {
-      case NewRound(gs) =>
+      case NewRound(_) =>
         println(s"ConsoleObserver: New round started. ")
 //        println(s"ConsoleObserver: Winning number: ${gs.winningNumber}")
       case BetPlaced(gs) =>

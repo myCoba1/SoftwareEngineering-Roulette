@@ -12,8 +12,12 @@ object Bet {
     val firstThirdParser = new FirstThirdBetParser()
     val secondThirdParser = new SecondThirdBetParser()
     val thirdThirdParser = new ThirdThirdBetParser()
+    val firstHalfBetParser = new FirstHalfBetParser()
+    val secondHalfBetParser = new SecondHalfBetParser()
 
-    numberParser.setNext(redParser).setNext(blackParser).setNext(firstThirdParser).setNext(secondThirdParser).setNext(thirdThirdParser)
+    numberParser.setNext(redParser).setNext(blackParser)
+      .setNext(firstThirdParser).setNext(secondThirdParser).setNext(thirdThirdParser)
+      .setNext(firstHalfBetParser).setNext(secondHalfBetParser)
     numberParser
   }
 

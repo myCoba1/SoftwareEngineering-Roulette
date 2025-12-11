@@ -36,7 +36,10 @@ class TableBuilder(totalWidth: Int, height: Int, randomInt: Option[Int]) {
   def buildSideParts(): this.type = {
     val blackBox = WordBox.wordBox("black")
     val redBox = WordBox.wordBox("red")
-    this.sideBlock = (blackBox ++ Vector(" ") ++ redBox).mkString("\n")
+    val firstHalfBox = WordBox.wordBox("1-18")
+    val secondHalfBox = WordBox.wordBox("19-36")
+
+    this.sideBlock = (firstHalfBox ++ Vector("| E |") ++ blackBox ++ redBox ++ Vector("| O |") ++ secondHalfBox).mkString("\n")
 
     val firstThird = WordBox.wordBox("1st 12")
     val secondThird = WordBox.wordBox("2nd 12")
@@ -50,10 +53,10 @@ class TableBuilder(totalWidth: Int, height: Int, randomInt: Option[Int]) {
     val thirdsLines = thirdsBlock.split("\n").toVector
     val sideLines = sideBlock.split("\n").toVector
 
-    val sideOffset = (tableBlockLines.length - sideLines.length) / 2 + 2
+    val sideOffset = (tableBlockLines.length - sideLines.length) / 2
     val centeredSide = Vector.fill(math.max(0, sideOffset))("") ++ sideLines ++ Vector.fill(math.max(0, tableBlockLines.length - sideLines.length - sideOffset))("")
 
-    val thirdsOffset = (tableBlockLines.length - thirdsLines.length) / 2
+    val thirdsOffset = (tableBlockLines.length - thirdsLines.length) / 2 + 1
     val centeredThirds = Vector.fill(math.max(0, thirdsOffset))("") ++ thirdsLines ++ Vector.fill(math.max(0, tableBlockLines.length - thirdsLines.length - thirdsOffset))("")
 
     val maxLines = math.max(tableBlockLines.length, math.max(centeredSide.length, centeredThirds.length))

@@ -6,7 +6,7 @@ import de.htwg.se.Roulette.controller.{GameController, GameState}
 object RouletteRound {
   def rouletteRound(controller: GameController): RoundAction = {
     controller.gameState match {
-      case Some(gs @ GameState(winningNumber, bets)) =>
+      case Some(GameState(_, bets)) =>
         val emptyTable = PrintTable.printTable(11, 1, None)
         println(emptyTable)
 

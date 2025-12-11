@@ -36,15 +36,25 @@ class BlackBetParser extends BetParser {
 
 class FirstThirdBetParser extends BetParser {
   override protected def handle(betString: String): Option[Bet] =
-    if (Set("1/3", "1,3").contains(betString.toLowerCase)) Some(FirstThirdBet()) else None
+    if (Set("1/3", "1t").contains(betString.toLowerCase)) Some(FirstThirdBet()) else None
 }
 
 class SecondThirdBetParser extends BetParser {
   override protected def handle(betString: String): Option[Bet] =
-    if (Set("2/3", "2,3").contains(betString.toLowerCase)) Some(SecondThirdBet()) else None
+    if (Set("2/3", "2t").contains(betString.toLowerCase)) Some(SecondThirdBet()) else None
 }
 
 class ThirdThirdBetParser extends BetParser {
   override protected def handle(betString: String): Option[Bet] =
-    if (Set("3/3", "3,3").contains(betString.toLowerCase)) Some(ThirdThirdBet()) else None
+    if (Set("3/3", "3t").contains(betString.toLowerCase)) Some(ThirdThirdBet()) else None
+}
+
+class FirstHalfBetParser extends BetParser {
+  override protected def handle(betString: String): Option[Bet] =
+    if (Set("1/2", "1h").contains(betString.toLowerCase)) Some(FirstHalfBet()) else None
+}
+
+class SecondHalfBetParser extends BetParser {
+  override protected def handle(betString: String): Option[Bet] =
+    if (Set("2/2", "2h").contains(betString.toLowerCase)) Some(SecondHalfBet()) else None
 }
