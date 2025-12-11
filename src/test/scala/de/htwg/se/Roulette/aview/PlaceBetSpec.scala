@@ -1,6 +1,7 @@
 package de.htwg.se.Roulette.aview
 
-import de.htwg.se.Roulette.controller.GameController
+import de.htwg.se.Roulette.controller.{GameController, GameState}
+import de.htwg.se.Roulette.model.RedBet
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers._
 
@@ -8,39 +9,32 @@ import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 
 class PlaceBetSpec extends AnyWordSpec {
   "The PlaceBet object" should {
-    "place a bet and print a winning message" in {
+    "place a bet by executing a command" in {
       val gameController = new GameController()
+      gameController.gameState = Some(GameState(1, List.empty))
       val in = new ByteArrayInputStream("R\n".getBytes)
       val out = new ByteArrayOutputStream()
       Console.withIn(in) {
         Console.withOut(out) {
-          PlaceBet.placeBet(gameController, 1) // 1 is Red
+          PlaceBet.placeBet(gameController)
         }
       }
-      out.toString should include("You won on your bet: Red")
+      gameController.gameState.get.bets should contain(RedBet())
+      out.toString should startWith("Place your Bet(s) (e.g., R 1/3 22): ")
     }
-    "place a bet and print a losing message" in {
-      val gameController = new GameController()
-      val in = new ByteArrayInputStream("B\n".getBytes)
-      val out = new ByteArrayOutputStream()
-      Console.withIn(in) {
-        Console.withOut(out) {
-          PlaceBet.placeBet(gameController, 1) // 1 is Red
-        }
-      }
-      out.toString should include("You lost on your bet: Black")
-    }
+
     "handle invalid input" in {
       val gameController = new GameController()
+      gameController.gameState = Some(GameState(1, List.empty))
       val in = new ByteArrayInputStream("invalid\nR\n".getBytes)
       val out = new ByteArrayOutputStream()
       Console.withIn(in) {
         Console.withOut(out) {
-          PlaceBet.placeBet(gameController, 1) // 1 is Red
+          PlaceBet.placeBet(gameController)
         }
       }
       out.toString should include("Invalid input.")
-      out.toString should include("You won on your bet: Red")
+      gameController.gameState.get.bets should contain(RedBet())
     }
   }
 }
