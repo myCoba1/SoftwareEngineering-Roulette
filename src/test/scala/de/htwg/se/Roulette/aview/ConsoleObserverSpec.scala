@@ -1,7 +1,7 @@
 package de.htwg.se.Roulette.aview
 
 import de.htwg.se.Roulette.controller.{BetPlaced, GameController}
-import de.htwg.se.Roulette.model.BetFactory
+import de.htwg.se.Roulette.model.Bet
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers._
 
@@ -14,7 +14,7 @@ class ConsoleObserverSpec extends AnyWordSpec {
       val observer = new ConsoleObserver(gameController)
       val out = new ByteArrayOutputStream()
       Console.withOut(out) {
-        gameController.placeBet(BetFactory.getBets("Red"), 1)
+        gameController.placeBet(Bet("Red"), 1)
       }
       out.toString should include("ConsoleObserver: Bets placed: Red on result 1")
     }

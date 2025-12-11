@@ -1,29 +1,51 @@
 package de.htwg.se.Roulette.controller
 
 import de.htwg.se.Roulette.model.Bet
+import scala.collection.mutable.ListBuffer
+import scala.util.{Success, Try}
 
 sealed trait ControllerEvent
-case class StateChanged(state: String) extends ControllerEvent
-case class BetPlaced(bets: List[Bet], result: Int) extends ControllerEvent
+case class NewRound(gameState: GameState) extends ControllerEvent
+case class BetPlaced(gameState: GameState) extends ControllerEvent
+case object BetUndone extends ControllerEvent
 
 class GameController extends Observable[ControllerEvent] {
-  private var state: String = "idle"
+  var gameState: Option[GameState] = None
+  private val undoStack: ListBuffer[Command] = ListBuffer.empty
 
-  def getState: String = state
-
-  def setState(newState: String): Unit = {
-    state = newState
-    notifyObservers(StateChanged(state))
+  def startRound(): Unit = {
+    val winningNumber = scala.util.Random.nextInt(37) // 0-36
+    gameState = Some(GameState(winningNumber))
+    gameState.foreach(gs => notifyObservers(NewRound(gs)))
   }
 
-  def placeBet(bets: List[Bet], randomInt: Int): Unit = {
-    // The logic to check if the bets are winners is in the bet objects themselves
-    val results = bets.map(bet => (bet, bet.isWinningBet(randomInt)))
+  def executeCommand(command: Command): Try[Unit] = {
+    val result = command.execute()
+    if (result.isSuccess) {
+      undoStack.prepend(command)
+    }
+    result
+  }
 
-    // You can now update your model with the bet and the result
-    // For example, you might have a player object that you update with winnings/losses
+  def undo(): Try[Unit] = {
+    undoStack.headOption
+      .map(cmd => {
+        val result = cmd.undo()
+        if (result.isSuccess) {
+          undoStack.remove(0)
+        }
+        result
+      })
+      .getOrElse(Success(()))
+  }
 
-    notifyObservers(BetPlaced(bets, randomInt))
-    setState(s"betsPlaced:${results.mkString(",")}") // optional state change notification
+  def placeBet(bets: List[Bet]): Unit = {
+    gameState = gameState.map(_.copy(bets = bets))
+    gameState.foreach(gs => notifyObservers(BetPlaced(gs)))
+  }
+
+  def restoreState(state: GameState): Try[Unit] = Try {
+    gameState = Some(state)
+    notifyObservers(BetUndone)
   }
 }

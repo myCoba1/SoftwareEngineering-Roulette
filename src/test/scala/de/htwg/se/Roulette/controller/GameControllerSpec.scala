@@ -1,10 +1,10 @@
 package de.htwg.se.Roulette.controller
 
-import de.htwg.se.Roulette.model.{Bet, BetFactory}
+import de.htwg.se.Roulette.model.{Bet, RedBet}
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers._
+import org.scalatest.matchers.should.Matchers
 
-class GameControllerSpec extends AnyWordSpec {
+class GameControllerSpec extends AnyWordSpec with Matchers {
   "A GameController" should {
     "have an initial state of 'idle'" in {
       val controller = new GameController()
@@ -36,7 +36,7 @@ class GameControllerSpec extends AnyWordSpec {
     "notify observers when a bet is placed" in {
       val controller = new GameController()
       var notified = false
-      val bet = BetFactory.getBets("Red").head
+      val bet = RedBet()
       val observer = new Observer[ControllerEvent] {
         override def update(event: ControllerEvent): Unit = {
           event match {

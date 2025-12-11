@@ -1,31 +1,27 @@
 package de.htwg.se.Roulette.aview
 
-import de.htwg.se.Roulette.controller.GameController
-import de.htwg.se.Roulette.model.{Bet, BetFactory}
+import de.htwg.se.Roulette.controller.{GameController, PlaceBetCommand}
+import de.htwg.se.Roulette.model.Bet
 
 object PlaceBet {
-  def placeBet(controller: GameController, randomInt: Int): Boolean = {
+  def placeBet(controller: GameController): Unit = {
     var bets: List[Bet] = List.empty
+
     while (bets.isEmpty) {
-      print("Place your Bet(s) (R 1/3 22): ")
+      print("Place your Bet(s) (e.g., R 1/3 22): ")
       val line = scala.io.StdIn.readLine()
-      if (line != null) {
-        bets = BetFactory.getBets(line)
-        if (bets.isEmpty) {
-          println("Invalid input. Please enter one or more valid bets (0-36, R/B, or 1/3, 2/3, 3/3)")
-        }
+
+      Option(line).map(_.trim.toLowerCase) match {
+        case Some(input) if input.nonEmpty =>
+          bets = Bet(line)
+          if (bets.isEmpty) {
+            println("Invalid input. Please enter one or more valid bets (0-36, R/B, or 1/3, 2/3, 3/3)")
+          } else {
+            val command = new PlaceBetCommand(bets, controller)
+            controller.executeCommand(command)
+          }
+        case _ => //null or empty input
       }
     }
-
-    bets.foreach { bet =>
-      if (bet.isWinningBet(randomInt)) {
-        println(s"You won on your bet: $bet")
-      } else {
-        println(s"You lost on your bet: $bet")
-      }
-    }
-    controller.placeBet(bets, randomInt)
-
-    true
   }
 }
