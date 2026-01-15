@@ -1,6 +1,6 @@
 package de.htwg.se.Roulette.controller
 
-import de.htwg.se.Roulette.model.Bet
+import de.htwg.se.Roulette.model.{Bet, GameState}
 import scala.collection.mutable.ListBuffer
 import scala.util.{Success, Try}
 
@@ -9,7 +9,7 @@ case class NewRound(gameState: GameState) extends ControllerEvent
 case class BetPlaced(gameState: GameState) extends ControllerEvent
 case object BetUndone extends ControllerEvent
 
-class GameController extends Observable[ControllerEvent] {
+class GameController extends ControllerInterface {
   var gameState: Option[GameState] = None
   private val undoStack: ListBuffer[Command] = ListBuffer.empty
 

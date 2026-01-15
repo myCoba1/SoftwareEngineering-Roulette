@@ -1,13 +1,13 @@
 package de.htwg.se.Roulette.aview
 
-import de.htwg.se.Roulette.controller.{GameController, PlaceBetCommand}
+import de.htwg.se.Roulette.controller.{ControllerInterface, PlaceBetCommand}
 import de.htwg.se.Roulette.model.Bet
 
 import scala.concurrent.Future
 import scala.io.StdIn
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class Tui(controller: GameController) {
+class Tui(controller: ControllerInterface) {
   def run(): Unit = {
     Future {
       while (true) {

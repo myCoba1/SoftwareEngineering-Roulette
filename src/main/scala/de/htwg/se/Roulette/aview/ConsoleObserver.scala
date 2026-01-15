@@ -3,7 +3,7 @@ package de.htwg.se.Roulette.aview
 import de.htwg.se.Roulette.controller._
 import de.htwg.se.Roulette.model.PrintTable
 
-class ConsoleObserver(controller: GameController) extends Observer[ControllerEvent] {
+class ConsoleObserver(controller: ControllerInterface) extends Observer[ControllerEvent] {
   controller.addObserver(this)
   override def update(event: ControllerEvent): Unit = {
     event match {

@@ -1,7 +1,7 @@
 package de.htwg.se.Roulette.aview
 
 import de.htwg.se.Roulette.controller._
-import de.htwg.se.Roulette.model.{Bet, NumberBet, RedBlack}
+import de.htwg.se.Roulette.model._
 
 import java.awt.{Color, Dimension}
 import java.awt.event.{ItemEvent, ItemListener}
@@ -9,7 +9,7 @@ import javax.swing.BorderFactory
 import scala.swing._
 import scala.swing.event.ButtonClicked
 
-class SwingGui(controller: GameController) extends MainFrame with Observer[ControllerEvent] {
+class SwingGui(controller: ControllerInterface) extends MainFrame with Observer[ControllerEvent] {
   controller.addObserver(this)
 
   title = "Roulette"
@@ -51,6 +51,13 @@ class SwingGui(controller: GameController) extends MainFrame with Observer[Contr
       btn
     }
 
+    def createLineButton(): ToggleButton ={
+      val btn = createBetButton("2-1", Color.LIGHT_GRAY)
+      btn.preferredSize = new Dimension(50, 50)
+      btn.maximumSize = new Dimension(Int.MaxValue, 50)
+      btn
+    }
+
     def createNumberButton(number: Int): ToggleButton = {
       val c = RedBlack.colorOf(number)
       val bg = if (c == 'R') Color.RED else Color.BLACK
@@ -60,19 +67,26 @@ class SwingGui(controller: GameController) extends MainFrame with Observer[Contr
     }
   }
 
-  private val redBetButton = ButtonFactory.createBetButton("Red", Color.RED, Color.WHITE)
-  private val blackBetButton = ButtonFactory.createBetButton("Black", Color.BLACK, Color.WHITE)
+  private val redBetButton = ButtonFactory.createBetButton("RED", Color.RED, Color.WHITE)
+  private val blackBetButton = ButtonFactory.createBetButton("BLACK", Color.BLACK, Color.WHITE)
   private val lowBetButton = ButtonFactory.createBetButton("1-18", Color.LIGHT_GRAY)
   private val highBetButton = ButtonFactory.createBetButton("19-36", Color.LIGHT_GRAY)
   private val firstDozenBetButton = ButtonFactory.createBetButton("1-12", Color.LIGHT_GRAY)
   private val secondDozenBetButton = ButtonFactory.createBetButton("13-24", Color.LIGHT_GRAY)
   private val thirdDozenBetButton = ButtonFactory.createBetButton("25-36", Color.LIGHT_GRAY)
+  private val evenBetButton = ButtonFactory.createBetButton("EVEN", Color.LIGHT_GRAY)
+  private val oddBetButton = ButtonFactory.createBetButton("ODD", Color.LIGHT_GRAY)
 
-  private val specialBetButtons = List(redBetButton, blackBetButton, lowBetButton, highBetButton, firstDozenBetButton, secondDozenBetButton, thirdDozenBetButton)
+  private val specialBetButtons = List(redBetButton, blackBetButton, lowBetButton, highBetButton, firstDozenBetButton, secondDozenBetButton, thirdDozenBetButton, evenBetButton, oddBetButton)
 
   private val zeroButton = ButtonFactory.createZeroButton()
 
   private val numberButtons = (1 to 36).map(ButtonFactory.createNumberButton)
+
+  private val lineOne = ButtonFactory.createLineButton()
+  private val lineTwo = ButtonFactory.createLineButton()
+  private val lineThree = ButtonFactory.createLineButton()
+  private val lineButtons = List(lineOne, lineTwo, lineThree)
 
   contents = new BoxPanel(Orientation.Vertical) {
     contents += new FlowPanel(winningNumberLabel)
@@ -87,21 +101,28 @@ class SwingGui(controller: GameController) extends MainFrame with Observer[Contr
           vGap = 0
           numberButtons.foreach(contents += _)
         }) = BorderPanel.Position.Center
+        layout(new GridPanel(1, 3) {
+          hGap = 0
+          vGap = 0
+          contents ++= List(lineOne, lineTwo, lineThree)
+        }) = BorderPanel.Position.South
       }
+
       contents += Swing.HStrut(10)
       
-      // First column: Dozens (Thirds)
+      // First column
       contents += new GridPanel(3, 1) {
         contents ++= List(firstDozenBetButton, secondDozenBetButton, thirdDozenBetButton)
         preferredSize = new Dimension(100, 600) // Height matches number grid (12 * 50)
       }
       
-      // Second column: Simple bets
-      contents += new GridPanel(4, 1) {
-        contents ++= List(lowBetButton, redBetButton, blackBetButton, highBetButton)
+      // Second column
+      contents += new GridPanel(6, 1) {
+        contents ++= List(lowBetButton,evenBetButton, redBetButton, blackBetButton, oddBetButton, highBetButton)
         preferredSize = new Dimension(100, 600)
       }
     }
+
     contents += new FlowPanel(newRoundButton, undoButton, quitButton)
     border = Swing.EmptyBorder(10, 10, 10, 10)
   }
@@ -114,14 +135,30 @@ class SwingGui(controller: GameController) extends MainFrame with Observer[Contr
         numberButtons.filter(_.selected).map(_.text.toInt)
 
       val numberBets = selectedNumbers.map(NumberBet)
-      val specialBets = specialBetButtons.filter(_.selected).flatMap(btn => Bet(btn.text.toLowerCase))
-      val allBets = numberBets ++ specialBets
+      val specialBets = specialBetButtons.filter(_.selected).flatMap {
+        case `lowBetButton` => Some(FirstHalfBet())
+        case `highBetButton` => Some(SecondHalfBet())
+        case `firstDozenBetButton` => Some(FirstThirdBet())
+        case `secondDozenBetButton` => Some(SecondThirdBet())
+        case `thirdDozenBetButton` => Some(ThirdThirdBet())
+        case `redBetButton` => Some(RedBet())
+        case `blackBetButton` => Some(BlackBet())
+        case `evenBetButton` => Some(EvenBet())
+        case `oddBetButton` => Some(OddBet())
+      }
+      val lineBets = List(
+        if (lineOne.selected) Some(LineOneBet()) else None,
+        if (lineTwo.selected) Some(LineTwoBet()) else None,
+        if (lineThree.selected) Some(LineThreeBet()) else None
+      ).flatten
+      val allBets = numberBets ++ specialBets ++ lineBets
 
       if (allBets.nonEmpty) {
         controller.executeCommand(new PlaceBetCommand(allBets, controller))
         zeroButton.selected = false
         numberButtons.foreach(_.selected = false)
         specialBetButtons.foreach(_.selected = false)
+        lineButtons.foreach(_.selected = false)
       } else {
         Dialog.showMessage(contents.head, "No number selected.", "Error")
       }
@@ -143,6 +180,7 @@ class SwingGui(controller: GameController) extends MainFrame with Observer[Contr
         zeroButton.enabled = true
         numberButtons.foreach(_.enabled = true)
         specialBetButtons.foreach(_.enabled = true)
+        lineButtons.foreach(_.enabled = true)
       case BetPlaced(gs) =>
         winningNumberLabel.text = s"Winning Number: ${gs.winningNumber}"
         betsLabel.text = s"Bets: ${gs.bets.mkString(", ")}"
@@ -151,6 +189,7 @@ class SwingGui(controller: GameController) extends MainFrame with Observer[Contr
         zeroButton.enabled = false
         numberButtons.foreach(_.enabled = false)
         specialBetButtons.foreach(_.enabled = false)
+        lineButtons.foreach(_.enabled = false)
       case BetUndone =>
         controller.gameState match {
           case Some(gs) =>
@@ -161,6 +200,7 @@ class SwingGui(controller: GameController) extends MainFrame with Observer[Contr
             zeroButton.enabled = true
             numberButtons.foreach(_.enabled = true)
             specialBetButtons.foreach(_.enabled = true)
+            lineButtons.foreach(_.enabled = true)
           case None =>
         }
     }

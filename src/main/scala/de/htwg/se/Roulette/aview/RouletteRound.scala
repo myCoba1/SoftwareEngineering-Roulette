@@ -1,10 +1,10 @@
 package de.htwg.se.Roulette.aview
 
-import de.htwg.se.Roulette.model.PrintTable
-import de.htwg.se.Roulette.controller.{GameController, GameState}
+import de.htwg.se.Roulette.model.{GameState, PrintTable}
+import de.htwg.se.Roulette.controller.ControllerInterface
 
 object RouletteRound {
-  def rouletteRound(controller: GameController): RoundAction = {
+  def rouletteRound(controller: ControllerInterface): RoundAction = {
     controller.gameState match {
       case Some(GameState(_, bets)) =>
         val emptyTable = PrintTable.printTable(11, 1, None)
@@ -33,7 +33,7 @@ object RouletteRound {
     }
   }
 
-  private def promptForNextAction(controller: GameController): RoundAction = {
+  private def promptForNextAction(controller: ControllerInterface): RoundAction = {
     val input = scala.io.StdIn.readLine("Play another round? (y/n/undo): ").trim.toLowerCase
     input match {
       case "y" => Continue

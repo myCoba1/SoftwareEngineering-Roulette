@@ -1,6 +1,6 @@
 package de.htwg.se.Roulette.controller
 
-import de.htwg.se.Roulette.model.Bet
+import de.htwg.se.Roulette.model.{Bet, GameState}
 import scala.util.{Success, Try}
 
 trait Command {
@@ -8,7 +8,7 @@ trait Command {
   def undo(): Try[Unit]
 }
 
-class PlaceBetCommand(bets: List[Bet], controller: GameController)
+class PlaceBetCommand(bets: List[Bet], controller: ControllerInterface)
     extends Command {
   private var previousState: Option[GameState] = None
 

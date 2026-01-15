@@ -1,10 +1,10 @@
 package de.htwg.se.Roulette.aview
 
-import de.htwg.se.Roulette.controller.{GameController, PlaceBetCommand}
+import de.htwg.se.Roulette.controller.{ControllerInterface, PlaceBetCommand}
 import de.htwg.se.Roulette.model.Bet
 
 object PlaceBet {
-  def placeBet(controller: GameController): Unit = {
+  def placeBet(controller: ControllerInterface): Unit = {
     var bets: List[Bet] = List.empty
 
     while (bets.isEmpty) {

@@ -14,10 +14,17 @@ object Bet {
     val thirdThirdParser = new ThirdThirdBetParser()
     val firstHalfBetParser = new FirstHalfBetParser()
     val secondHalfBetParser = new SecondHalfBetParser()
+    val evenBetParser = new EvenBetParser()
+    val oddBetParser = new OddBetParser()
+    val lineOneBetParser = new LineOneBetParser()
+    val lineTwoBetParser = new LineTwoBetParser()
+    val lineThreeBetParser = new LineThreeBetParser()
 
     numberParser.setNext(redParser).setNext(blackParser)
       .setNext(firstThirdParser).setNext(secondThirdParser).setNext(thirdThirdParser)
       .setNext(firstHalfBetParser).setNext(secondHalfBetParser)
+      .setNext(evenBetParser).setNext(oddBetParser)
+      .setNext(lineOneBetParser).setNext(lineTwoBetParser).setNext(lineThreeBetParser)
     numberParser
   }
 
