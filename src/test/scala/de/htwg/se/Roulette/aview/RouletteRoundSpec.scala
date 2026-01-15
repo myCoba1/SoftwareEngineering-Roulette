@@ -1,12 +1,12 @@
 package de.htwg.se.Roulette.aview
 
-import de.htwg.se.Roulette.controller.{GameController, GameState}
+import de.htwg.se.Roulette.controller.GameController
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers._
+import org.scalatest.matchers.should.Matchers
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 
-class RouletteRoundSpec extends AnyWordSpec {
+class RouletteRoundSpec extends AnyWordSpec with Matchers {
   "The RouletteRound object" should {
     "run a round and return Continue" in {
       val gameController = new GameController()

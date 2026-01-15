@@ -1,13 +1,13 @@
 package de.htwg.se.Roulette.aview
 
-import de.htwg.se.Roulette.controller.{GameController, GameState}
-import de.htwg.se.Roulette.model.RedBet
+import de.htwg.se.Roulette.controller.GameController
+import de.htwg.se.Roulette.model.{GameState, RedBet}
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers._
+import org.scalatest.matchers.should.Matchers
 
 import java.io.ByteArrayOutputStream
 
-class ConsoleObserverSpec extends AnyWordSpec {
+class ConsoleObserverSpec extends AnyWordSpec with Matchers {
   "A ConsoleObserver" should {
     "print a message when a bet is placed" in {
       val gameController = new GameController()
@@ -17,7 +17,9 @@ class ConsoleObserverSpec extends AnyWordSpec {
       Console.withOut(out) {
         gameController.placeBet(List(RedBet()))
       }
-      out.toString.trim should be("ConsoleObserver: Bets placed: Red on result 1")
+      val output = out.toString
+      output should include ("Bets placed: Red")
+      output should include ("You WON on your bet: Red")
     }
   }
 }

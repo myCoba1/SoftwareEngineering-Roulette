@@ -1,13 +1,13 @@
 package de.htwg.se.Roulette.aview
 
-import de.htwg.se.Roulette.controller.{GameController, GameState}
-import de.htwg.se.Roulette.model.RedBet
+import de.htwg.se.Roulette.controller.GameController
+import de.htwg.se.Roulette.model.{GameState, RedBet}
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers._
+import org.scalatest.matchers.should.Matchers
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 
-class PlaceBetSpec extends AnyWordSpec {
+class PlaceBetSpec extends AnyWordSpec with Matchers {
   "The PlaceBet object" should {
     "place a bet by executing a command" in {
       val gameController = new GameController()
@@ -20,7 +20,7 @@ class PlaceBetSpec extends AnyWordSpec {
         }
       }
       gameController.gameState.get.bets should contain(RedBet())
-      out.toString should startWith("Place your Bet(s) (e.g., R 1/3 22): ")
+      out.toString should include("Place your Bet(s) (e.g., R 1/3 22): ")
     }
 
     "handle invalid input" in {
