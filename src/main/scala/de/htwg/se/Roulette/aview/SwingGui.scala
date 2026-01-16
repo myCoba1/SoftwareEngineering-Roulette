@@ -1,5 +1,6 @@
 package de.htwg.se.Roulette.aview
 
+import com.google.inject.Inject
 import de.htwg.se.Roulette.controller._
 import de.htwg.se.Roulette.model._
 
@@ -9,7 +10,7 @@ import javax.swing.BorderFactory
 import scala.swing._
 import scala.swing.event.ButtonClicked
 
-class SwingGui(controller: ControllerInterface) extends MainFrame with Observer[ControllerEvent] {
+class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame with Observer[ControllerEvent] {
   controller.addObserver(this)
 
   title = "Roulette"

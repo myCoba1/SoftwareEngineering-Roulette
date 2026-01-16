@@ -1,9 +1,10 @@
 package de.htwg.se.Roulette.aview
 
+import com.google.inject.Inject
 import de.htwg.se.Roulette.controller._
 import de.htwg.se.Roulette.model.PrintTable
 
-class ConsoleObserver(controller: ControllerInterface) extends Observer[ControllerEvent] {
+class ConsoleObserver @Inject() (controller: ControllerInterface) extends Observer[ControllerEvent] {
   controller.addObserver(this)
   override def update(event: ControllerEvent): Unit = {
     event match {

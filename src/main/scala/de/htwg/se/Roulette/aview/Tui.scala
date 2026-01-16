@@ -1,5 +1,6 @@
 package de.htwg.se.Roulette.aview
 
+import com.google.inject.Inject
 import de.htwg.se.Roulette.controller.{ControllerInterface, PlaceBetCommand}
 import de.htwg.se.Roulette.model.Bet
 
@@ -7,7 +8,7 @@ import scala.concurrent.Future
 import scala.io.StdIn
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class Tui(controller: ControllerInterface) {
+class Tui @Inject() (controller: ControllerInterface) {
   def run(): Unit = {
     Future {
       while (true) {
