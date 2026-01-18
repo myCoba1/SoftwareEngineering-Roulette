@@ -1,5 +1,7 @@
 package de.htwg.se.Roulette.model
 
+import de.htwg.se.Roulette.model.terminal.{HexOffset, PrintBoxRow, PrintHex, PrintLine, WordBox}
+
 class TableBuilder(totalWidth: Int, height: Int, randomInt: Option[Int]) {
   private var hexBlock: String = ""
   private var tableBlock: String = ""

@@ -1,16 +1,13 @@
-package de.htwg.se.Roulette.aview
+package de.htwg.se.Roulette.aview.aviewImpl
 
 import com.google.inject.Inject
-import de.htwg.se.Roulette.controller.{ControllerInterface, PlaceBetCommand}
-import de.htwg.se.Roulette.model.Bet
+import de.htwg.se.Roulette.controller.ControllerInterface
+import de.htwg.se.Roulette.model.bets.Bet
 
-import scala.concurrent.Future
 import scala.io.StdIn
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class Tui @Inject() (controller: ControllerInterface) {
   def run(): Unit = {
-    Future {
       while (true) {
         val input = StdIn.readLine()
         input.trim.toLowerCase.split("\\s+").toList match {
@@ -20,12 +17,11 @@ class Tui @Inject() (controller: ControllerInterface) {
           case betStrings =>
             val bets = Bet(betStrings.mkString(" "))
             if (bets.nonEmpty) {
-              controller.executeCommand(new PlaceBetCommand(bets, controller))
+              controller.placeBet(bets)
             } else {
               println("Invalid command or bet.")
             }
         }
       }
-    }
   }
 }

@@ -1,5 +1,6 @@
 package de.htwg.se.Roulette.model
 
+import de.htwg.se.Roulette.model.bets.{EvenBet, EvenOdd, OddBet}
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 

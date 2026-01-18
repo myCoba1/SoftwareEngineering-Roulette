@@ -1,6 +1,7 @@
 package de.htwg.se.Roulette.aview
 
-import de.htwg.se.Roulette.controller.GameController
+import de.htwg.se.Roulette.aview.aviewImpl.{Continue, Quit, RouletteRound, Undo}
+import de.htwg.se.Roulette.controller.controllerImpl.GameController
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 

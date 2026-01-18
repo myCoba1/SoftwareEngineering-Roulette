@@ -1,4 +1,4 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.model.terminal
 
 object PrintHex {
   def printHex(totalWidth: Int, height: Int, randomInt: Option[Int]): String = {

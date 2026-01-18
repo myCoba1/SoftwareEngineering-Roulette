@@ -1,4 +1,6 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.model.terminal
+
+import de.htwg.se.Roulette.model.bets.RedBlack
 
 object PrintBoxRow {
   def printBoxRow(totalWidth: Int, boxHeight: Int, boxesPerRow: Int, includeBottom: Boolean,

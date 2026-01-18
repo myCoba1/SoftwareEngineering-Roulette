@@ -1,5 +1,6 @@
 package de.htwg.se.Roulette.model
 
+import de.htwg.se.Roulette.model.bets.{BlackBet, BlackBetParser, FirstHalfBet, FirstHalfBetParser, FirstThirdBet, FirstThirdBetParser, NumberBet, NumberBetParser, RedBet, RedBetParser, SecondHalfBet, SecondHalfBetParser, SecondThirdBet, SecondThirdBetParser, ThirdThirdBet, ThirdThirdBetParser}
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 

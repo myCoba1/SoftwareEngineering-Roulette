@@ -1,4 +1,4 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.model.terminal
 
 object WordBox {
   def wordBox(word: String, innerWidth: Int = 3): Vector[String] = {

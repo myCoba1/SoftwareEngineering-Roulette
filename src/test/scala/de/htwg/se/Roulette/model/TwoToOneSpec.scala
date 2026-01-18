@@ -1,24 +1,25 @@
 package de.htwg.se.Roulette.model
 
+import de.htwg.se.Roulette.model.bets.{LineOneBet, LineThreeBet, LineTwoBet, TwoToOne}
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 
 class TwoToOneSpec extends AnyWordSpec with Matchers {
   "TwoToOne" should {
     "identify numbers in line one" in {
-      TwoToOne.lineOf(1) should be("12-1")
-      TwoToOne.lineOf(4) should be("12-1")
-      TwoToOne.lineOf(34) should be("12-1")
+      TwoToOne.lineOf(1) should be("1. 2-1")
+      TwoToOne.lineOf(4) should be("1. 2-1")
+      TwoToOne.lineOf(34) should be("1. 2-1")
     }
     "identify numbers in line two" in {
-      TwoToOne.lineOf(2) should be("22-1")
-      TwoToOne.lineOf(5) should be("22-1")
-      TwoToOne.lineOf(35) should be("22-1")
+      TwoToOne.lineOf(2) should be("2. 2-1")
+      TwoToOne.lineOf(5) should be("2. 2-1")
+      TwoToOne.lineOf(35) should be("2. 2-1")
     }
     "identify numbers in line three" in {
-      TwoToOne.lineOf(3) should be("32-1")
-      TwoToOne.lineOf(6) should be("32-1")
-      TwoToOne.lineOf(36) should be("32-1")
+      TwoToOne.lineOf(3) should be("3. 2-1")
+      TwoToOne.lineOf(6) should be("3. 2-1")
+      TwoToOne.lineOf(36) should be("3. 2-1")
     }
     "return None for 0 or invalid numbers" in {
       TwoToOne.lineOf(0) should be("None")
@@ -38,7 +39,7 @@ class TwoToOneSpec extends AnyWordSpec with Matchers {
       bet.isWinningBet(0) should be(false)
     }
     "have correct string representation" in {
-      bet.toString should be("12-1")
+      bet.toString should be("1. 2-1")
     }
   }
 
@@ -54,7 +55,7 @@ class TwoToOneSpec extends AnyWordSpec with Matchers {
       bet.isWinningBet(0) should be(false)
     }
     "have correct string representation" in {
-      bet.toString should be("22-1")
+      bet.toString should be("2. 2-1")
     }
   }
 
@@ -70,7 +71,7 @@ class TwoToOneSpec extends AnyWordSpec with Matchers {
       bet.isWinningBet(0) should be(false)
     }
     "have correct string representation" in {
-      bet.toString should be("32-1")
+      bet.toString should be("3. 2-1")
     }
   }
 }

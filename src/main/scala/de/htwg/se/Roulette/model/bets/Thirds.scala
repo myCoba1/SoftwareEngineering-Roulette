@@ -1,4 +1,6 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.model.bets
+
+import de.htwg.se.Roulette.model.bets.Bet
 
 object Thirds {
   val firstThird: Set[Int] = (1 to 12).toSet

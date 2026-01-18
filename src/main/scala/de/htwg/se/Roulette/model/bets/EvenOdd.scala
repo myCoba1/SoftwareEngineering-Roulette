@@ -1,4 +1,6 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.model.bets
+
+import de.htwg.se.Roulette.model.bets.Bet
 
 object EvenOdd {
   val even: Set[Int] = (2 to 36 by 2).toSet

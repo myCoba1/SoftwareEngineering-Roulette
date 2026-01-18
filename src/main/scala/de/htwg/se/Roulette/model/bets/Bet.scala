@@ -1,4 +1,6 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.model.bets
+
+import de.htwg.se.Roulette.model.*
 
 trait Bet {
   def isWinningBet(winningNumber: Int): Boolean
@@ -9,13 +11,17 @@ object Bet {
     val numberParser = new NumberBetParser()
     val redParser = new RedBetParser()
     val blackParser = new BlackBetParser()
+    
     val firstThirdParser = new FirstThirdBetParser()
     val secondThirdParser = new SecondThirdBetParser()
     val thirdThirdParser = new ThirdThirdBetParser()
+    
     val firstHalfBetParser = new FirstHalfBetParser()
     val secondHalfBetParser = new SecondHalfBetParser()
+    
     val evenBetParser = new EvenBetParser()
     val oddBetParser = new OddBetParser()
+    
     val lineOneBetParser = new LineOneBetParser()
     val lineTwoBetParser = new LineTwoBetParser()
     val lineThreeBetParser = new LineThreeBetParser()

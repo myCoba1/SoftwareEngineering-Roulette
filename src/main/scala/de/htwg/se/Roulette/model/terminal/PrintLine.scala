@@ -1,4 +1,4 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.model.terminal
 
 object PrintLine {
   def printLine(totalWidth: Int, boxesPerRow: Int): String = {

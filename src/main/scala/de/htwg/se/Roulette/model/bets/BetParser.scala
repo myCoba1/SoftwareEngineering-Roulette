@@ -1,4 +1,6 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.model.bets
+
+import de.htwg.se.Roulette.model.bets.{Bet, NumberBet}
 
 trait BetParser {
   private var next: Option[BetParser] = None

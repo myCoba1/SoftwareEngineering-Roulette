@@ -1,16 +1,19 @@
-package de.htwg.se.Roulette.aview
+package de.htwg.se.Roulette.aview.aviewImpl
 
 import com.google.inject.Inject
-import de.htwg.se.Roulette.controller._
-import de.htwg.se.Roulette.model._
+import de.htwg.se.Roulette.aview.GuiInterface
+import de.htwg.se.Roulette.controller.{BetPlaced,BetUndone,ControllerEvent,ControllerInterface,NewRound}
+import de.htwg.se.Roulette.model.bets.*
+import de.htwg.se.Roulette.util.Observer
 
-import java.awt.{Color, Dimension}
 import java.awt.event.{ItemEvent, ItemListener}
+import java.awt.{Color, Dimension}
 import javax.swing.BorderFactory
-import scala.swing._
+import scala.swing.*
 import scala.swing.event.ButtonClicked
 
-class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame with Observer[ControllerEvent] {
+class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame 
+  with Observer[ControllerEvent] with GuiInterface {
   controller.addObserver(this)
 
   title = "Roulette"
@@ -78,7 +81,8 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame wit
   private val evenBetButton = ButtonFactory.createBetButton("EVEN", Color.LIGHT_GRAY)
   private val oddBetButton = ButtonFactory.createBetButton("ODD", Color.LIGHT_GRAY)
 
-  private val specialBetButtons = List(redBetButton, blackBetButton, lowBetButton, highBetButton, firstDozenBetButton, secondDozenBetButton, thirdDozenBetButton, evenBetButton, oddBetButton)
+  private val specialBetButtons = List(redBetButton, blackBetButton, lowBetButton, highBetButton, firstDozenBetButton, 
+                                        secondDozenBetButton, thirdDozenBetButton, evenBetButton, oddBetButton)
 
   private val zeroButton = ButtonFactory.createZeroButton()
 
@@ -135,7 +139,7 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame wit
       val selectedNumbers = (if (zeroButton.selected) List(0) else Nil) ++
         numberButtons.filter(_.selected).map(_.text.toInt)
 
-      val numberBets = selectedNumbers.map(NumberBet)
+      val numberBets = selectedNumbers.map(de.htwg.se.Roulette.model.bets.NumberBet.apply)
       val specialBets = specialBetButtons.filter(_.selected).flatMap {
         case `lowBetButton` => Some(FirstHalfBet())
         case `highBetButton` => Some(SecondHalfBet())
@@ -155,7 +159,7 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame wit
       val allBets = numberBets ++ specialBets ++ lineBets
 
       if (allBets.nonEmpty) {
-        controller.executeCommand(new PlaceBetCommand(allBets, controller))
+        controller.placeBet(allBets)
         zeroButton.selected = false
         numberButtons.foreach(_.selected = false)
         specialBetButtons.foreach(_.selected = false)
@@ -207,7 +211,10 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame wit
     }
   }
 
+  override def open(): Unit = {
+    visible = true
+  }
+
   pack()
   centerOnScreen()
-  open()
 }

@@ -1,4 +1,6 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.model.terminal
+
+import de.htwg.se.Roulette.model.TableBuilder
 
 object PrintTable {
   def printTable(totalWidth: Int, height: Int, randomInt: Option[Int]): String = {

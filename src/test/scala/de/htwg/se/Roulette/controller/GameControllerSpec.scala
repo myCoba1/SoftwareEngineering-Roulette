@@ -1,6 +1,8 @@
 package de.htwg.se.Roulette.controller
 
-import de.htwg.se.Roulette.model.{Bet, BlackBet, RedBet}
+import de.htwg.se.Roulette.controller.controllerImpl.GameController
+import de.htwg.se.Roulette.model.bets.{BlackBet, RedBet}
+import de.htwg.se.Roulette.util.Observer
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -50,12 +52,11 @@ class GameControllerSpec extends AnyWordSpec with Matchers {
       notified should be(true)
     }
 
-    "execute and undo a command" in {
+    "undo a placed bet" in {
       val controller = new GameController()
       controller.startRound()
       val initialBets = controller.gameState.get.bets
-      val command = new PlaceBetCommand(List(BlackBet()), controller)
-      controller.executeCommand(command) should be(a[Success[_]])
+      controller.placeBet(List(BlackBet()))
       controller.gameState.get.bets should contain(BlackBet())
       controller.undo() should be(a[Success[_]])
       controller.gameState.get.bets should be(initialBets)

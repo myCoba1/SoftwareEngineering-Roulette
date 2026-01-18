@@ -1,5 +1,6 @@
 package de.htwg.se.Roulette.model
 
+import de.htwg.se.Roulette.model.bets.{FirstHalfBet, Halves, SecondHalfBet}
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 

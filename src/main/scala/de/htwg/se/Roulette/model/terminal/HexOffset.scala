@@ -1,4 +1,4 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.model.terminal
 
 object HexOffset {
   def computeHexOffset(totalWidth: Int, height: Int): Int = {

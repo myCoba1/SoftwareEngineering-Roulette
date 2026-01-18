@@ -1,4 +1,4 @@
-package de.htwg.se.Roulette.controller
+package de.htwg.se.Roulette.util
 
 import scala.collection.mutable.ListBuffer
 

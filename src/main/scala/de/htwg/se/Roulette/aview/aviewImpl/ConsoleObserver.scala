@@ -1,10 +1,13 @@
-package de.htwg.se.Roulette.aview
+package de.htwg.se.Roulette.aview.aviewImpl
 
 import com.google.inject.Inject
-import de.htwg.se.Roulette.controller._
-import de.htwg.se.Roulette.model.PrintTable
+import de.htwg.se.Roulette.aview.ConsoleObserverInterface
+import de.htwg.se.Roulette.controller.{BetPlaced,BetUndone,ControllerEvent,ControllerInterface,NewRound}
+import de.htwg.se.Roulette.model.terminal.PrintTable
+import de.htwg.se.Roulette.util.Observer
 
-class ConsoleObserver @Inject() (controller: ControllerInterface) extends Observer[ControllerEvent] {
+class ConsoleObserver @Inject() (controller: ControllerInterface) extends Observer[ControllerEvent] 
+  with ConsoleObserverInterface {
   controller.addObserver(this)
   override def update(event: ControllerEvent): Unit = {
     event match {

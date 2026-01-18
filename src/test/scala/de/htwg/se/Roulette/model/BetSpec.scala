@@ -1,5 +1,6 @@
 package de.htwg.se.Roulette.model
 
+import de.htwg.se.Roulette.model.bets._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -47,6 +48,22 @@ class BetSpec extends AnyWordSpec with Matchers {
 
     "return a ThirdThirdBet for '3/3'" in {
       Bet("3/3").head shouldBe a [ThirdThirdBet]
+    }
+
+    "return an EvenBet for 'even' or 'e'" in {
+      Bet("even").head shouldBe a [EvenBet]
+      Bet("e").head shouldBe a [EvenBet]
+    }
+
+    "return an OddBet for 'odd' or 'o'" in {
+      Bet("odd").head shouldBe a [OddBet]
+      Bet("o").head shouldBe a [OddBet]
+    }
+
+    "return LineBets for '12-1', '22-1', '32-1' or their aliases" in {
+      Bet("12-1").head shouldBe a [LineOneBet]
+      Bet("2l").head shouldBe a [LineTwoBet]
+      Bet("32-1").head shouldBe a [LineThreeBet]
     }
 
     "return an empty list for invalid input" in {

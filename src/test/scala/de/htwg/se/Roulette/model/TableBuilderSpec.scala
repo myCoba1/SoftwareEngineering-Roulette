@@ -1,5 +1,7 @@
 package de.htwg.se.Roulette.model
 
+import de.htwg.se.Roulette.model.terminal.WordBox
+
 import java.lang.reflect.Field
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
