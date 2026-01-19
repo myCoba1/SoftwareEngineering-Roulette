@@ -8,6 +8,7 @@ import de.htwg.se.Roulette.util.Observer
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import scala.util.{Success, Try}
+import java.awt.GraphicsEnvironment
 
 class SwingGuiSpec extends AnyWordSpec with Matchers {
 
@@ -27,25 +28,31 @@ class SwingGuiSpec extends AnyWordSpec with Matchers {
   }
 
   "A SwingGui" should {
-    val controller = new MockController
-    val gui = new SwingGui(controller)
+    if (GraphicsEnvironment.isHeadless) {
+      "be skipped in headless environment" in {
+        cancel("Running in headless environment")
+      }
+    } else {
+      val controller = new MockController
+      val gui = new SwingGui(controller)
 
-    "have the correct title" in {
-      gui.title should be("Roulette")
-    }
+      "have the correct title" in {
+        gui.title should be("Roulette")
+      }
 
-    "initialize components correctly" in {
-      gui.contents should not be empty
-    }
+      "initialize components correctly" in {
+        gui.contents should not be empty
+      }
 
-    "handle update events safely" in {
-      // We verify that the update method processes events without throwing exceptions.
-      // Assuming GameState(winningNumber: Int, bets: List[Bet]) structure based on usage.
-      val mockGameState = GameState(0, List())
-      
-      noException should be thrownBy gui.update(NewRound(mockGameState))
-      noException should be thrownBy gui.update(BetPlaced(mockGameState))
-      noException should be thrownBy gui.update(BetUndone)
+      "handle update events safely" in {
+        // We verify that the update method processes events without throwing exceptions.
+        // Assuming GameState(winningNumber: Int, bets: List[Bet]) structure based on usage.
+        val mockGameState = GameState(0, List())
+        
+        noException should be thrownBy gui.update(NewRound(mockGameState))
+        noException should be thrownBy gui.update(BetPlaced(mockGameState))
+        noException should be thrownBy gui.update(BetUndone)
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 package de.htwg.se.Roulette
 
-import com.google.inject.Guice
+import com.google.inject.{Guice, ProvisionException}
 import de.htwg.se.Roulette.aview.aviewImpl.{ConsoleObserver, SwingGui}
 import de.htwg.se.Roulette.aview.{ConsoleObserverInterface, GuiInterface}
 import de.htwg.se.Roulette.controller.ControllerInterface
@@ -10,6 +10,7 @@ import de.htwg.se.Roulette.model.fileIoComponent.fileIoXmlImpl.FileIO
 import net.codingwell.scalaguice.InjectorExtensions._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import java.awt.GraphicsEnvironment
 
 class RouletteModuleSpec extends AnyWordSpec with Matchers {
   "A RouletteModule" should {
@@ -26,8 +27,15 @@ class RouletteModuleSpec extends AnyWordSpec with Matchers {
       val consoleObserver = injector.instance[ConsoleObserverInterface]
       consoleObserver shouldBe a[ConsoleObserver]
 
-      val gui = injector.instance[GuiInterface]
-      gui shouldBe a[SwingGui]
+      if (!GraphicsEnvironment.isHeadless) {
+        val gui = injector.instance[GuiInterface]
+        gui shouldBe a[SwingGui]
+      } else {
+        val ex = intercept[ProvisionException] {
+          injector.instance[GuiInterface]
+        }
+        ex.getCause shouldBe a[java.awt.HeadlessException]
+      }
 
       val fileIo = injector.instance[FileIOInterface]
       fileIo shouldBe a[FileIO]
