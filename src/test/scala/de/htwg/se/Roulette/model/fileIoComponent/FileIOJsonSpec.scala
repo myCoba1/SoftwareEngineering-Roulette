@@ -1,12 +1,12 @@
 package de.htwg.se.Roulette.model.fileIoComponent
 
-import de.htwg.se.Roulette.model.bets.{BlackBet, NumberBet}
+import de.htwg.se.Roulette.model.bets._
 import de.htwg.se.Roulette.model.fileIoComponent.fileIoJsonImpl.FileIO
 import de.htwg.se.Roulette.model.modelImpl.GameState
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-import java.io.File
+import java.io.{File, PrintWriter}
 
 class FileIOJsonSpec extends AnyWordSpec with Matchers {
 
@@ -29,6 +29,38 @@ class FileIOJsonSpec extends AnyWordSpec with Matchers {
       } finally {
         if (file.exists()) file.delete()
       }
+    }
+
+    "handle all bet types correctly" in {
+      val fileIo = new FileIO()
+      val allBetsState = GameState(0, List(
+        NumberBet(1),
+        RedBet(),
+        BlackBet(),
+        FirstThirdBet(),
+        SecondThirdBet(),
+        ThirdThirdBet(),
+        FirstHalfBet(),
+        SecondHalfBet(),
+        EvenBet(),
+        OddBet(),
+        LineOneBet(),
+        LineTwoBet(),
+        LineThreeBet()
+      ))
+      fileIo.save(allBetsState)
+      val loaded = fileIo.load
+      loaded.bets should contain theSameElementsAs allBetsState.bets
+      new File("gameState.json").delete()
+    }
+
+    "throw an exception when loading unknown bet type" in {
+      val fileIo = new FileIO()
+      val pw = new PrintWriter(new File("gameState.json"))
+      pw.write("""{"winningNumber":0,"bets":[{"type":"UnknownBet","value":0}]}""")
+      pw.close()
+      an [RuntimeException] should be thrownBy fileIo.load
+      new File("gameState.json").delete()
     }
   }
 }
