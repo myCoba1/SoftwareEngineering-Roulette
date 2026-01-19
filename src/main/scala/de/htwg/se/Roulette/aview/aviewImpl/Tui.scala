@@ -8,22 +8,26 @@ import scala.io.StdIn
 
 class Tui @Inject() (controller: ControllerInterface) {
   def run(): Unit = {
-      while (true) {
-        val input = StdIn.readLine()
-        input.trim.toLowerCase.split("\\s+").toList match {
-          case "new" :: Nil => controller.startRound()
-          case "undo" :: Nil => controller.undo()
-          case "save" :: Nil => controller.save()
-          case "load" :: Nil => controller.load()
-          case "quit" :: Nil => sys.exit(0)
-          case betStrings =>
-            val bets = Bet(betStrings.mkString(" "))
-            if (bets.nonEmpty) {
-              controller.placeBet(bets)
-            } else {
-              println("Invalid command or bet.")
-            }
+    var input: String = ""
+    while ({input = StdIn.readLine(); input != null}) {
+      processInput(input)
+    }
+  }
+
+  def processInput(input: String): Unit = {
+    input.trim.toLowerCase.split("\\s+").toList match {
+      case "new" :: Nil => controller.startRound()
+      case "undo" :: Nil => controller.undo()
+      case "save" :: Nil => controller.save()
+      case "load" :: Nil => controller.load()
+      case "quit" :: Nil => sys.exit(0)
+      case betStrings =>
+        val bets = Bet(betStrings.mkString(" "))
+        if (bets.nonEmpty) {
+          controller.placeBet(bets)
+        } else {
+          println("Invalid command or bet.")
         }
-      }
+    }
   }
 }
