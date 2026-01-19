@@ -14,23 +14,26 @@ object TwoToOne {
     case _ => "None"
   }
 }
-case class LineOneBet() extends Bet {
+case class LineOneBet(amount: Int) extends Bet {
   override def isWinningBet(winningNumber: Int): Boolean = {
     TwoToOne.lineOne.contains(winningNumber)
   }
-  override def toString: String = "1. 2-1"
+  override def multiplier: Int = 2
+  override def toString: String = s"1. 2-1 ($amount)"
 }
 
-case class LineTwoBet() extends Bet {
+case class LineTwoBet(amount: Int) extends Bet {
   override def isWinningBet(winningNumber: Int): Boolean = {
     TwoToOne.lineTwo.contains(winningNumber)
     }
-  override def toString: String = "2. 2-1"
+  override def multiplier: Int = 2
+  override def toString: String = s"2. 2-1 ($amount)"
 }
 
-case class LineThreeBet() extends Bet {
+case class LineThreeBet(amount: Int) extends Bet {
   override def isWinningBet(winningNumber: Int): Boolean = {
     TwoToOne.lineThree.contains(winningNumber)
   }
-  override def toString: String = "3. 2-1"
+  override def multiplier: Int = 2
+  override def toString: String = s"3. 2-1 ($amount)"
 }

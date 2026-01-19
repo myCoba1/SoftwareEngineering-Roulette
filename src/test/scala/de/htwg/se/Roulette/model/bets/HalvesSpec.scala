@@ -28,7 +28,7 @@ class HalvesSpec extends AnyWordSpec with Matchers {
   }
 
   "A FirstHalfBet" should {
-    val bet = FirstHalfBet()
+    val bet = FirstHalfBet(10)
     "win for numbers in the first half" in {
       bet.isWinningBet(1) shouldBe true
       bet.isWinningBet(18) shouldBe true
@@ -38,12 +38,12 @@ class HalvesSpec extends AnyWordSpec with Matchers {
       bet.isWinningBet(0) shouldBe false
     }
     "have a correct string representation" in {
-      bet.toString shouldBe "1 to 18"
+      bet.toString shouldBe "1 to 18 (10)"
     }
   }
 
   "A SecondHalfBet" should {
-    val bet = SecondHalfBet()
+    val bet = SecondHalfBet(10)
     "win for numbers in the second half" in {
       bet.isWinningBet(19) shouldBe true
       bet.isWinningBet(36) shouldBe true
@@ -53,7 +53,7 @@ class HalvesSpec extends AnyWordSpec with Matchers {
       bet.isWinningBet(0) shouldBe false
     }
     "have a correct string representation" in {
-      bet.toString shouldBe "19 to 36"
+      bet.toString shouldBe "19 to 36 (10)"
     }
   }
 }

@@ -12,16 +12,18 @@ object Halves {
     case _ => "None"
   }
 }
-case class FirstHalfBet() extends Bet {
+case class FirstHalfBet(amount: Int) extends Bet {
   override def isWinningBet(winningNumber: Int): Boolean = {
     Halves.firstHalf.contains(winningNumber)
   }
-  override def toString: String = "1 to 18"
+  override def multiplier: Int = 1
+  override def toString: String = s"1 to 18 ($amount)"
 }
 
-case class SecondHalfBet() extends Bet {
+case class SecondHalfBet(amount: Int) extends Bet {
   override def isWinningBet(winningNumber: Int): Boolean = {
     Halves.secondHalf.contains(winningNumber)
   }
-  override def toString: String = "19 to 36"
+  override def multiplier: Int = 1
+  override def toString: String = s"19 to 36 ($amount)"
 }

@@ -28,7 +28,7 @@ class RedBlackSpec extends AnyWordSpec with Matchers {
   }
 
   "A RedBet" should {
-    val redBet = RedBet()
+    val redBet = RedBet(10)
 
     "win if the number is red" in {
       RedBlack.reds.foreach { redNumber =>
@@ -43,12 +43,12 @@ class RedBlackSpec extends AnyWordSpec with Matchers {
     }
 
     "have a correct string representation" in {
-      redBet.toString shouldBe "Red"
+      redBet.toString shouldBe "Red (10)"
     }
   }
 
   "A BlackBet" should {
-    val blackBet = BlackBet()
+    val blackBet = BlackBet(10)
 
     "win if the number is black" in {
       RedBlack.blacks.foreach { blackNumber =>
@@ -63,7 +63,7 @@ class RedBlackSpec extends AnyWordSpec with Matchers {
     }
 
     "have a correct string representation" in {
-      blackBet.toString shouldBe "Black"
+      blackBet.toString shouldBe "Black (10)"
     }
   }
 }

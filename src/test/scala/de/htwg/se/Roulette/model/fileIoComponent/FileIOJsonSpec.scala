@@ -13,7 +13,7 @@ class FileIOJsonSpec extends AnyWordSpec with Matchers {
   "The JSON FileIO implementation" should {
     "save and load a game state correctly" in {
       val fileIo = new FileIO()
-      val gameState = GameState(winningNumber = 15, bets = List(BlackBet(), NumberBet(22)))
+      val gameState = GameState(winningNumber = 15, bets = List(BlackBet(10), NumberBet(22, 10)))
       val file = new File("gameState.json")
 
       if (file.exists()) file.delete()
@@ -34,19 +34,19 @@ class FileIOJsonSpec extends AnyWordSpec with Matchers {
     "handle all bet types correctly" in {
       val fileIo = new FileIO()
       val allBetsState = GameState(0, List(
-        NumberBet(1),
-        RedBet(),
-        BlackBet(),
-        FirstThirdBet(),
-        SecondThirdBet(),
-        ThirdThirdBet(),
-        FirstHalfBet(),
-        SecondHalfBet(),
-        EvenBet(),
-        OddBet(),
-        LineOneBet(),
-        LineTwoBet(),
-        LineThreeBet()
+        NumberBet(1, 10),
+        RedBet(10),
+        BlackBet(10),
+        FirstThirdBet(10),
+        SecondThirdBet(10),
+        ThirdThirdBet(10),
+        FirstHalfBet(10),
+        SecondHalfBet(10),
+        EvenBet(10),
+        OddBet(10),
+        LineOneBet(10),
+        LineTwoBet(10),
+        LineThreeBet(10)
       ))
       fileIo.save(allBetsState)
       val loaded = fileIo.load

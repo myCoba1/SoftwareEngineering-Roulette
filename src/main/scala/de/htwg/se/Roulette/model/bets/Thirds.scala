@@ -15,23 +15,26 @@ object Thirds {
   }
 }
 
-case class FirstThirdBet() extends Bet {
+case class FirstThirdBet(amount: Int) extends Bet {
   override def isWinningBet(winningNumber: Int): Boolean = {
     Thirds.firstThird.contains(winningNumber)
   }
-  override def toString: String = "1 st 12"
+  override def multiplier: Int = 2
+  override def toString: String = s"1 st 12 ($amount)"
 }
 
-case class SecondThirdBet() extends Bet {
+case class SecondThirdBet(amount: Int) extends Bet {
   override def isWinningBet(winningNumber: Int): Boolean = {
     Thirds.secondThird.contains(winningNumber)
   }
-  override def toString: String = "2 nd 12"
+  override def multiplier: Int = 2
+  override def toString: String = s"2 nd 12 ($amount)"
 }
 
-case class ThirdThirdBet() extends Bet {
+case class ThirdThirdBet(amount: Int) extends Bet {
   override def isWinningBet(winningNumber: Int): Boolean = {
     Thirds.thirdThird.contains(winningNumber)
   }
-  override def toString: String = "3 rd 12"
+  override def multiplier: Int = 2
+  override def toString: String = s"3 rd 12 ($amount)"
 }

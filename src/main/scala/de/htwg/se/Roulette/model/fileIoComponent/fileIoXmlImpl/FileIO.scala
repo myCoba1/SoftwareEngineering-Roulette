@@ -11,27 +11,29 @@ class FileIO extends FileIOInterface {
   override def load: GameStateInterface = {
     val file = XML.loadFile("gameState.xml")
     val winningNumber = (file \ "winningNumber").text.trim.toInt
+    val balance = (file \ "balance").text.trim.toInt
     val betNodes = (file \ "bets" \ "bet")
     val bets = betNodes.map { node =>
       val betType = (node \ "@type").text
+      val amount = (node \ "amount").text.trim.toInt
       betType match {
-        case "NumberBet" => NumberBet((node \ "value").text.trim.toInt)
-        case "RedBet" => RedBet()
-        case "BlackBet" => BlackBet()
-        case "FirstThirdBet" => FirstThirdBet()
-        case "SecondThirdBet" => SecondThirdBet()
-        case "ThirdThirdBet" => ThirdThirdBet()
-        case "FirstHalfBet" => FirstHalfBet()
-        case "SecondHalfBet" => SecondHalfBet()
-        case "EvenBet" => EvenBet()
-        case "OddBet" => OddBet()
-        case "LineOneBet" => LineOneBet()
-        case "LineTwoBet" => LineTwoBet()
-        case "LineThreeBet" => LineThreeBet()
+        case "NumberBet" => NumberBet((node \ "value").text.trim.toInt, amount)
+        case "RedBet" => RedBet(amount)
+        case "BlackBet" => BlackBet(amount)
+        case "FirstThirdBet" => FirstThirdBet(amount)
+        case "SecondThirdBet" => SecondThirdBet(amount)
+        case "ThirdThirdBet" => ThirdThirdBet(amount)
+        case "FirstHalfBet" => FirstHalfBet(amount)
+        case "SecondHalfBet" => SecondHalfBet(amount)
+        case "EvenBet" => EvenBet(amount)
+        case "OddBet" => OddBet(amount)
+        case "LineOneBet" => LineOneBet(amount)
+        case "LineTwoBet" => LineTwoBet(amount)
+        case "LineThreeBet" => LineThreeBet(amount)
         case _ => throw new RuntimeException("Unknown Bet Type")
       }
     }.toList
-    GameState(winningNumber, bets)
+    GameState(winningNumber, bets, balance)
   }
 
   override def save(gameState: GameStateInterface): Unit = {
@@ -39,6 +41,7 @@ class FileIO extends FileIOInterface {
     val prettyPrinter = new PrettyPrinter(120, 4)
     val xml = <gameState>
       <winningNumber>{gameState.winningNumber}</winningNumber>
+      <balance>{gameState.balance}</balance>
       <bets>
         {gameState.bets.map(betToXml)}
       </bets>
@@ -49,8 +52,8 @@ class FileIO extends FileIOInterface {
 
   private def betToXml(bet: Bet): Node = {
     bet match {
-      case NumberBet(n) => <bet type="NumberBet"><value>{n}</value></bet>
-      case _ => <bet type={bet.getClass.getSimpleName.replace("$", "")}/>
+      case NumberBet(n, amount) => <bet type="NumberBet"><value>{n}</value><amount>{amount}</amount></bet>
+      case _ => <bet type={bet.getClass.getSimpleName.replace("$", "")}><amount>{bet.amount}</amount></bet>
     }
   }
 }

@@ -7,7 +7,7 @@ import org.scalatest.wordspec.AnyWordSpec
 class GameStateSpec extends AnyWordSpec with Matchers {
   "A GameState" should {
     "store the winning number and bets" in {
-      val bets = List(RedBet())
+      val bets = List(RedBet(10))
       val gameState = GameState(10, bets)
       gameState.winningNumber should be(10)
       gameState.bets should be(bets)

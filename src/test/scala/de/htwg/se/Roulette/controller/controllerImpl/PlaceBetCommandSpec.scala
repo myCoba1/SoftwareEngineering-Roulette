@@ -20,7 +20,7 @@ class PlaceBetCommandSpec extends AnyWordSpec with Matchers {
       // Capture state before command
       val previousState = controller.currentGameState
       
-      val bets = List(RedBet())
+      val bets = List(RedBet(10))
       val command = new PlaceBetCommand(bets, controller)
       
       // Execute

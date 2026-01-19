@@ -37,7 +37,7 @@ class ThirdsSpec extends AnyWordSpec with Matchers {
   }
 
   "A FirstThirdBet" should {
-    val bet = FirstThirdBet()
+    val bet = FirstThirdBet(10)
     "win for numbers in the first third" in {
       (1 to 12).foreach { n =>
         bet.isWinningBet(n) shouldBe true
@@ -49,12 +49,12 @@ class ThirdsSpec extends AnyWordSpec with Matchers {
       }
     }
     "have a correct string representation" in {
-      bet.toString shouldBe "1 st 12"
+      bet.toString shouldBe "1 st 12 (10)"
     }
   }
 
   "A SecondThirdBet" should {
-    val bet = SecondThirdBet()
+    val bet = SecondThirdBet(10)
     "win for numbers in the second third" in {
       (13 to 24).foreach { n =>
         bet.isWinningBet(n) shouldBe true
@@ -66,12 +66,12 @@ class ThirdsSpec extends AnyWordSpec with Matchers {
       }
     }
     "have a correct string representation" in {
-      bet.toString shouldBe "2 nd 12"
+      bet.toString shouldBe "2 nd 12 (10)"
     }
   }
 
   "A ThirdThirdBet" should {
-    val bet = ThirdThirdBet()
+    val bet = ThirdThirdBet(10)
     "win for numbers in the third third" in {
       (25 to 36).foreach { n =>
         bet.isWinningBet(n) shouldBe true
@@ -83,7 +83,7 @@ class ThirdsSpec extends AnyWordSpec with Matchers {
       }
     }
     "have a correct string representation" in {
-      bet.toString shouldBe "3 rd 12"
+      bet.toString shouldBe "3 rd 12 (10)"
     }
   }
 }

@@ -3,7 +3,10 @@ package de.htwg.se.Roulette.model.bets
 import de.htwg.se.Roulette.model.*
 
 trait Bet {
+  def amount: Int
   def isWinningBet(winningNumber: Int): Boolean
+  def multiplier: Int
+  def payout(winningNumber: Int): Int = if (isWinningBet(winningNumber)) amount * (multiplier + 1) else 0
 }
 
 object Bet {
@@ -34,12 +37,13 @@ object Bet {
     numberParser
   }
 
-  def apply(input: String): List[Bet] = {
-    input.trim.split("\\s+").flatMap(chain.parse).toList
+  def apply(input: String, amount: Int): List[Bet] = {
+    input.trim.split("\\s+").flatMap(s => chain.parse(s, amount)).toList
   }
 }
 
-case class NumberBet(number: Int) extends Bet {
+case class NumberBet(number: Int, amount: Int) extends Bet {
   override def isWinningBet(winningNumber: Int): Boolean = number == winningNumber
-  override def toString: String = number.toString
+  override def multiplier: Int = 35
+  override def toString: String = s"$number ($amount)"
 }

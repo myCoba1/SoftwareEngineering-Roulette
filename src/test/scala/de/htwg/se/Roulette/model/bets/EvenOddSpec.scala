@@ -21,7 +21,7 @@ class EvenOddSpec extends AnyWordSpec with Matchers {
   }
 
   "EvenBet" should {
-    val bet = EvenBet()
+    val bet = EvenBet(10)
     "win on even numbers" in {
       bet.isWinningBet(2) should be(true)
       bet.isWinningBet(10) should be(true)
@@ -34,12 +34,12 @@ class EvenOddSpec extends AnyWordSpec with Matchers {
       bet.isWinningBet(0) should be(false)
     }
     "have correct string representation" in {
-      bet.toString should be("Even")
+      bet.toString should be("Even (10)")
     }
   }
 
   "OddBet" should {
-    val bet = OddBet()
+    val bet = OddBet(10)
     "win on odd numbers" in {
       bet.isWinningBet(1) should be(true)
       bet.isWinningBet(11) should be(true)
@@ -52,7 +52,7 @@ class EvenOddSpec extends AnyWordSpec with Matchers {
       bet.isWinningBet(0) should be(false)
     }
     "have correct string representation" in {
-      bet.toString should be("Odd")
+      bet.toString should be("Odd (10)")
     }
   }
 }

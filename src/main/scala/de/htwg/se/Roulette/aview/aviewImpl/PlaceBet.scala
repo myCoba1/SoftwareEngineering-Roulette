@@ -13,7 +13,7 @@ object PlaceBet {
 
       Option(line).map(_.trim.toLowerCase) match {
         case Some(input) if input.nonEmpty =>
-          bets = Bet(line)
+          bets = Bet(line, 10)
           if (bets.isEmpty) {
             println("Invalid input. Please enter one or more valid bets (0-36, R/B, or 1/3, 2/3, 3/3)")
           } else {

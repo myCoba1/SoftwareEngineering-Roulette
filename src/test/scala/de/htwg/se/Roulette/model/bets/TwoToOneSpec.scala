@@ -28,7 +28,7 @@ class TwoToOneSpec extends AnyWordSpec with Matchers {
   }
 
   "LineOneBet" should {
-    val bet = LineOneBet()
+    val bet = LineOneBet(10)
     "win on numbers in line one" in {
       bet.isWinningBet(1) should be(true)
       bet.isWinningBet(34) should be(true)
@@ -39,12 +39,12 @@ class TwoToOneSpec extends AnyWordSpec with Matchers {
       bet.isWinningBet(0) should be(false)
     }
     "have correct string representation" in {
-      bet.toString should be("1. 2-1")
+      bet.toString should be("1. 2-1 (10)")
     }
   }
 
   "LineTwoBet" should {
-    val bet = LineTwoBet()
+    val bet = LineTwoBet(10)
     "win on numbers in line two" in {
       bet.isWinningBet(2) should be(true)
       bet.isWinningBet(35) should be(true)
@@ -55,12 +55,12 @@ class TwoToOneSpec extends AnyWordSpec with Matchers {
       bet.isWinningBet(0) should be(false)
     }
     "have correct string representation" in {
-      bet.toString should be("2. 2-1")
+      bet.toString should be("2. 2-1 (10)")
     }
   }
 
   "LineThreeBet" should {
-    val bet = LineThreeBet()
+    val bet = LineThreeBet(10)
     "win on numbers in line three" in {
       bet.isWinningBet(3) should be(true)
       bet.isWinningBet(36) should be(true)
@@ -71,7 +71,7 @@ class TwoToOneSpec extends AnyWordSpec with Matchers {
       bet.isWinningBet(0) should be(false)
     }
     "have correct string representation" in {
-      bet.toString should be("3. 2-1")
+      bet.toString should be("3. 2-1 (10)")
     }
   }
 }

@@ -13,17 +13,20 @@ class ConsoleObserver @Inject() (controller: ControllerInterface) extends Observ
     event match {
       case NewRound(gs) =>
         println("New round started.")
+        println(s"Current Balance: ${gs.balance}")
         println(PrintTable.printTable(11, 1, None))
-        println("Place your bet(s) (e.g., '10 r 1/3'), or type 'new', 'undo', 'quit'.")
+        println("Place your bet(s) (e.g., '10 r 1/3'), set 'stake <amount>', or type 'new', 'undo', 'quit'.")
       case BetPlaced(gs) =>
         println(s"Bets placed: ${gs.bets.mkString(", ")}")
         gs.bets.foreach { bet =>
           if (bet.isWinningBet(gs.winningNumber)) {
-            println(s"You WON on your bet: $bet")
+            println(s"You WON on your bet: $bet. Payout: ${bet.payout(gs.winningNumber)}")
           } else {
             println(s"You LOST on your bet: $bet")
           }
         }
+        println(s"New Balance: ${gs.balance}")
+        if (gs.balance <= 0) println("GAME OVER! You have reached 0 balance.")
         println(PrintTable.printTable(11, 1, Some(gs.winningNumber)))
         println("Type 'new' to start a new round.")
       case BetUndone =>

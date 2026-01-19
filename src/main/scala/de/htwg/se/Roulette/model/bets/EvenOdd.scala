@@ -12,16 +12,18 @@ object EvenOdd {
     case _ => "None"
   }
 }
-case class EvenBet() extends Bet {
+case class EvenBet(amount: Int) extends Bet {
   override def isWinningBet(winningNumber: Int): Boolean = {
     EvenOdd.even.contains(winningNumber)
   }
-  override def toString: String = "Even"
+  override def multiplier: Int = 1
+  override def toString: String = s"Even ($amount)"
 }
 
-case class OddBet() extends Bet{
+case class OddBet(amount: Int) extends Bet{
   override def isWinningBet(winningNumber: Int): Boolean = {
     EvenOdd.odd.contains(winningNumber)
   }
-  override def toString: String = "Odd"
+  override def multiplier: Int = 1
+  override def toString: String = s"Odd ($amount)"
 }

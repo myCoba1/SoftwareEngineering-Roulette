@@ -28,7 +28,7 @@ class PlaceBetSpec extends AnyWordSpec with Matchers {
           PlaceBet.placeBet(gameController)
         }
       }
-      gameController.gameState.get.bets should contain(RedBet())
+      gameController.gameState.get.bets should contain(RedBet(10))
       out.toString should include("Place your Bet(s) (e.g., R 1/3 22): ")
     }
 
@@ -43,7 +43,7 @@ class PlaceBetSpec extends AnyWordSpec with Matchers {
         }
       }
       out.toString should include("Invalid input.")
-      gameController.gameState.get.bets should contain(RedBet())
+      gameController.gameState.get.bets should contain(RedBet(10))
     }
   }
 }

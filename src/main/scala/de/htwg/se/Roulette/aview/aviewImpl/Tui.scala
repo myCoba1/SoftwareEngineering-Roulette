@@ -7,6 +7,7 @@ import de.htwg.se.Roulette.model.bets.Bet
 import scala.io.StdIn
 
 class Tui @Inject() (controller: ControllerInterface) {
+  var currentStake: Int = 10
   def run(): Unit = {
     var input: String = ""
     while ({input = StdIn.readLine(); input != null}) {
@@ -21,8 +22,13 @@ class Tui @Inject() (controller: ControllerInterface) {
       case "save" :: Nil => controller.save()
       case "load" :: Nil => controller.load()
       case "quit" :: Nil => sys.exit(0)
+      case "stake" :: amount :: Nil =>
+        amount.toIntOption match {
+          case Some(a) if a > 0 => currentStake = a; println(s"Stake set to $currentStake")
+          case _ => println("Invalid stake amount.")
+        }
       case betStrings =>
-        val bets = Bet(betStrings.mkString(" "))
+        val bets = Bet(betStrings.mkString(" "), currentStake)
         if (bets.nonEmpty) {
           controller.placeBet(bets)
         } else {

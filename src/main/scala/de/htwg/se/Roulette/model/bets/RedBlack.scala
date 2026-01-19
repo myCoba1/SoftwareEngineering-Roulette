@@ -13,16 +13,18 @@ object RedBlack {
   }
 }
 
-case class RedBet() extends Bet {
+case class RedBet(amount: Int) extends Bet {
   override def isWinningBet(winningNumber: Int): Boolean = {
     RedBlack.reds.contains(winningNumber)
   }
-  override def toString: String = "Red"
+  override def multiplier: Int = 1
+  override def toString: String = s"Red ($amount)"
 }
 
-case class BlackBet() extends Bet {
+case class BlackBet(amount: Int) extends Bet {
   override def isWinningBet(winningNumber: Int): Boolean = {
     RedBlack.blacks.contains(winningNumber)
   }
-  override def toString: String = "Black"
+  override def multiplier: Int = 1
+  override def toString: String = s"Black ($amount)"
 }

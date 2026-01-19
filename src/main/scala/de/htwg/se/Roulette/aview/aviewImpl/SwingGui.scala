@@ -19,10 +19,16 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame
   title = "Roulette"
   private val winningNumberLabel = new Label("Winning Number: -")
   private val betsLabel = new Label("Bets: ")
-  private val placeBetButton = new Button("Place Bet")
-  private val newRoundButton = new Button("New Round")
-  private val undoButton = new Button("Undo")
-  private val quitButton = new Button("Quit")
+  private val balanceLabel = new Label("Balance: 100")
+  private var currentBalance: Int = 100
+  private[aviewImpl] val stakeTextField = new TextField("10") { columns = 5 }
+  private[aviewImpl] val allInButton = new Button("All In")
+  private[aviewImpl] val placeBetButton = new Button("Place Bet")
+  private[aviewImpl] val newRoundButton = new Button("New Round")
+  private[aviewImpl] val undoButton = new Button("Undo")
+  private[aviewImpl] val saveButton = new Button("Save")
+  private[aviewImpl] val loadButton = new Button("Load")
+  private[aviewImpl] val quitButton = new Button("Quit")
 
   private object ButtonFactory {
     def createBetButton(text: String, bg: Color, fg: Color = Color.BLACK): ToggleButton = {
@@ -71,7 +77,7 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame
     }
   }
 
-  private val redBetButton = ButtonFactory.createBetButton("RED", Color.RED, Color.WHITE)
+  private[aviewImpl] val redBetButton = ButtonFactory.createBetButton("RED", Color.RED, Color.WHITE)
   private val blackBetButton = ButtonFactory.createBetButton("BLACK", Color.BLACK, Color.WHITE)
   private val lowBetButton = ButtonFactory.createBetButton("1-18", Color.LIGHT_GRAY)
   private val highBetButton = ButtonFactory.createBetButton("19-36", Color.LIGHT_GRAY)
@@ -96,6 +102,8 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame
   contents = new BoxPanel(Orientation.Vertical) {
     contents += new FlowPanel(winningNumberLabel)
     contents += new FlowPanel(betsLabel)
+    contents += new FlowPanel(balanceLabel)
+    contents += new FlowPanel(new Label("Stake:"), stakeTextField, allInButton)
     contents += new FlowPanel(placeBetButton)
 
     contents += new BoxPanel(Orientation.Horizontal) {
@@ -128,49 +136,65 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame
       }
     }
 
-    contents += new FlowPanel(newRoundButton, undoButton, quitButton)
+    contents += new FlowPanel(newRoundButton, undoButton, saveButton, loadButton, quitButton)
     border = Swing.EmptyBorder(10, 10, 10, 10)
   }
 
-  listenTo(placeBetButton, newRoundButton, undoButton, quitButton)
+  listenTo(placeBetButton, newRoundButton, undoButton, quitButton, allInButton, saveButton, loadButton)
 
   reactions += {
+    case ButtonClicked(`allInButton`) =>
+      stakeTextField.text = currentBalance.toString
     case ButtonClicked(`placeBetButton`) =>
-      val selectedNumbers = (if (zeroButton.selected) List(0) else Nil) ++
-        numberButtons.filter(_.selected).map(_.text.toInt)
+      stakeTextField.text.toIntOption match {
+        case Some(stake) if stake > 0 && stake <= currentBalance =>
+          val selectedNumbers = (if (zeroButton.selected) List(0) else Nil) ++
+            numberButtons.filter(_.selected).map(_.text.toInt)
 
-      val numberBets = selectedNumbers.map(de.htwg.se.Roulette.model.bets.NumberBet.apply)
-      val specialBets = specialBetButtons.filter(_.selected).flatMap {
-        case `lowBetButton` => Some(FirstHalfBet())
-        case `highBetButton` => Some(SecondHalfBet())
-        case `firstDozenBetButton` => Some(FirstThirdBet())
-        case `secondDozenBetButton` => Some(SecondThirdBet())
-        case `thirdDozenBetButton` => Some(ThirdThirdBet())
-        case `redBetButton` => Some(RedBet())
-        case `blackBetButton` => Some(BlackBet())
-        case `evenBetButton` => Some(EvenBet())
-        case `oddBetButton` => Some(OddBet())
-      }
-      val lineBets = List(
-        if (lineOne.selected) Some(LineOneBet()) else None,
-        if (lineTwo.selected) Some(LineTwoBet()) else None,
-        if (lineThree.selected) Some(LineThreeBet()) else None
-      ).flatten
-      val allBets = numberBets ++ specialBets ++ lineBets
+          val numberBets = selectedNumbers.map(n => de.htwg.se.Roulette.model.bets.NumberBet(n, stake))
+          val specialBets = specialBetButtons.filter(_.selected).flatMap {
+            case `lowBetButton` => Some(FirstHalfBet(stake))
+            case `highBetButton` => Some(SecondHalfBet(stake))
+            case `firstDozenBetButton` => Some(FirstThirdBet(stake))
+            case `secondDozenBetButton` => Some(SecondThirdBet(stake))
+            case `thirdDozenBetButton` => Some(ThirdThirdBet(stake))
+            case `redBetButton` => Some(RedBet(stake))
+            case `blackBetButton` => Some(BlackBet(stake))
+            case `evenBetButton` => Some(EvenBet(stake))
+            case `oddBetButton` => Some(OddBet(stake))
+          }
+          val lineBets = List(
+            if (lineOne.selected) Some(LineOneBet(stake)) else None,
+            if (lineTwo.selected) Some(LineTwoBet(stake)) else None,
+            if (lineThree.selected) Some(LineThreeBet(stake)) else None
+          ).flatten
+          val allBets = numberBets ++ specialBets ++ lineBets
 
-      if (allBets.nonEmpty) {
-        controller.placeBet(allBets)
-        zeroButton.selected = false
-        numberButtons.foreach(_.selected = false)
-        specialBetButtons.foreach(_.selected = false)
-        lineButtons.foreach(_.selected = false)
-      } else {
-        Dialog.showMessage(contents.head, "No number selected.", "Error")
+          if (allBets.nonEmpty) {
+            controller.placeBet(allBets)
+            zeroButton.selected = false
+            numberButtons.foreach(_.selected = false)
+            specialBetButtons.foreach(_.selected = false)
+            lineButtons.foreach(_.selected = false)
+          } else {
+            Dialog.showMessage(contents.head, "No number selected.", "Error")
+          }
+        case Some(stake) if stake <= 0 =>
+          Dialog.showMessage(contents.head, "Stake must be positive.", "Error")
+        case Some(stake) if stake > currentBalance =>
+          Dialog.showMessage(contents.head, s"You only have $currentBalance.", "Error")
+        case None =>
+          Dialog.showMessage(contents.head, "Please enter a valid integer stake.", "Error")
       }
     case ButtonClicked(`newRoundButton`) =>
       controller.startRound()
     case ButtonClicked(`undoButton`) =>
       controller.undo()
+    case ButtonClicked(`saveButton`) =>
+      controller.save()
+      Dialog.showMessage(contents.head, "Game Saved.", "Info")
+    case ButtonClicked(`loadButton`) =>
+      controller.load()
     case ButtonClicked(`quitButton`) =>
       sys.exit(0)
   }
@@ -178,8 +202,10 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame
   override def update(event: ControllerEvent): Unit = {
     event match {
       case NewRound(gs) =>
+        currentBalance = gs.balance
         winningNumberLabel.text = "Place your bets!"
         betsLabel.text = "Bets: "
+        balanceLabel.text = s"Balance: ${gs.balance}"
         placeBetButton.enabled = true
         newRoundButton.enabled = false
         zeroButton.enabled = true
@@ -187,8 +213,13 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame
         specialBetButtons.foreach(_.enabled = true)
         lineButtons.foreach(_.enabled = true)
       case BetPlaced(gs) =>
+        currentBalance = gs.balance
         winningNumberLabel.text = s"Winning Number: ${gs.winningNumber}"
         betsLabel.text = s"Bets: ${gs.bets.mkString(", ")}"
+        balanceLabel.text = s"Balance: ${gs.balance}"
+        if (gs.balance <= 0) {
+          Dialog.showMessage(contents.head, "Game Over! You ran out of money.", "Game Over")
+        }
         placeBetButton.enabled = false
         newRoundButton.enabled = true
         zeroButton.enabled = false
@@ -198,8 +229,10 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame
       case BetUndone =>
         controller.gameState match {
           case Some(gs) =>
+            currentBalance = gs.balance
             winningNumberLabel.text = "Place your bets!"
             betsLabel.text = s"Bets: ${gs.bets.mkString(", ")}"
+            balanceLabel.text = s"Balance: ${gs.balance}"
             placeBetButton.enabled = true
             newRoundButton.enabled = false
             zeroButton.enabled = true

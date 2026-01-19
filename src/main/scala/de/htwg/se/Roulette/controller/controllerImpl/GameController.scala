@@ -16,8 +16,13 @@ class GameController @Inject() (fileIo: FileIOInterface) extends ControllerInter
   private val undoStack: ListBuffer[PlaceBetCommand] = ListBuffer.empty
 
   def startRound(): Unit = this.synchronized {
+    val currentBalance = currentGameState.map(_.balance).getOrElse(100)
+    if (currentBalance <= 0) {
+      // Game Over: Reset or just notify? For now, we reset if they try to start a new round with 0.
+      // Or we could block it. Let's assume a reset for a new game.
+    }
     val winningNumber = scala.util.Random.nextInt(37) // 0-36
-    currentGameState = Some(GameState(winningNumber))
+    currentGameState = Some(GameState(winningNumber, List.empty, if (currentBalance <= 0) 100 else currentBalance))
     currentGameState.foreach(gs => notifyObservers(NewRound(gs)))
   }
 
@@ -43,8 +48,15 @@ class GameController @Inject() (fileIo: FileIOInterface) extends ControllerInter
   }
 
   private[controllerImpl] def setBets(bets: List[Bet]): Unit = this.synchronized {
-    currentGameState = currentGameState.map(_.copy(bets = bets))
-    currentGameState.foreach(gs => notifyObservers(BetPlaced(gs)))
+    currentGameState match {
+      case Some(gs) =>
+        val totalAmount = bets.map(_.amount).sum
+        val newBalance = gs.balance - totalAmount + bets.map(_.payout(gs.winningNumber)).sum
+        val newGs = gs.copy(bets = bets, balance = newBalance)
+        currentGameState = Some(newGs)
+        notifyObservers(BetPlaced(newGs))
+      case None =>
+    }
   }
 
   private[controllerImpl] def restoreState(state: Option[GameState]): Try[Unit] = Try { this.synchronized {

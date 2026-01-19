@@ -54,15 +54,43 @@ class TuiSpec extends AnyWordSpec with Matchers {
       controller.loadCalled should be(true)
     }
 
+    "set stake on input 'stake <amount>'" in {
+      val out = new ByteArrayOutputStream()
+      Console.withOut(out) {
+        tui.processInput("stake 50")
+      }
+      tui.currentStake should be(50)
+      out.toString should include("Stake set to 50")
+    }
+
+    "handle invalid stake amount" in {
+      val out = new ByteArrayOutputStream()
+      Console.withOut(out) {
+        tui.processInput("stake -10")
+        tui.processInput("stake abc")
+      }
+      out.toString should include("Invalid stake amount")
+    }
+
     "place a bet on valid bet input" in {
+      tui.currentStake = 10
       tui.processInput("red")
-      controller.placedBets should contain(RedBet())
+      controller.placedBets should contain(RedBet(10))
     }
 
     "print an error message on invalid input" in {
       val out = new ByteArrayOutputStream()
       Console.withOut(out) {
         tui.processInput("invalid input")
+      }
+      out.toString should include("Invalid command or bet.")
+    }
+    
+    "print an error message on empty bet result" in {
+       val out = new ByteArrayOutputStream()
+      Console.withOut(out) {
+        // "xyz" returns empty list of bets
+        tui.processInput("xyz")
       }
       out.toString should include("Invalid command or bet.")
     }
