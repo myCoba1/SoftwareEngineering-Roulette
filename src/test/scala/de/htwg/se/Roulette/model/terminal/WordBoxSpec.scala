@@ -1,8 +1,8 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.model.terminal
 
 import de.htwg.se.Roulette.model.terminal.WordBox
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 class WordBoxSpec extends AnyWordSpec with Matchers {
 

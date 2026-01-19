@@ -1,8 +1,8 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.model.bets
 
 import de.htwg.se.Roulette.model.bets.{FirstThirdBet, SecondThirdBet, ThirdThirdBet, Thirds}
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 class ThirdsSpec extends AnyWordSpec with Matchers {
 

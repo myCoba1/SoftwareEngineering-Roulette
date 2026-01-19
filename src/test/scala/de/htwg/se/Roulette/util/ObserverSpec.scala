@@ -1,8 +1,8 @@
-package de.htwg.se.Roulette.controller
+package de.htwg.se.Roulette.util
 
 import de.htwg.se.Roulette.util.Observer
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers.*
+import org.scalatest.wordspec.AnyWordSpec
 
 class ObserverSpec extends AnyWordSpec {
   "An Observer" should {

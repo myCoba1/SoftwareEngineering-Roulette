@@ -1,6 +1,6 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.model.bets
 
-import de.htwg.se.Roulette.model.bets._
+import de.htwg.se.Roulette.model.bets.*
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

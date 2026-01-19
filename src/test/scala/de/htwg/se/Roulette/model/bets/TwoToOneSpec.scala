@@ -1,8 +1,8 @@
-package de.htwg.se.Roulette.model
+package de.htwg.se.Roulette.model.bets
 
 import de.htwg.se.Roulette.model.bets.{LineOneBet, LineThreeBet, LineTwoBet, TwoToOne}
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 class TwoToOneSpec extends AnyWordSpec with Matchers {
   "TwoToOne" should {

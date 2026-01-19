@@ -1,14 +1,16 @@
 package de.htwg.se.Roulette.controller.controllerImpl
 
+import com.google.inject.Inject
 import de.htwg.se.Roulette.controller.{BetPlaced, BetUndone, ControllerEvent, ControllerInterface, NewRound}
 import de.htwg.se.Roulette.model.GameStateInterface
 import de.htwg.se.Roulette.model.bets.Bet
+import de.htwg.se.Roulette.model.fileIoComponent.FileIOInterface
 import de.htwg.se.Roulette.model.modelImpl.GameState
 
 import scala.collection.mutable.ListBuffer
 import scala.util.{Success, Try}
 
-class GameController extends ControllerInterface {
+class GameController @Inject() (fileIo: FileIOInterface) extends ControllerInterface {
   @volatile private[controllerImpl] var currentGameState: Option[GameState] = None
   override def gameState: Option[GameStateInterface] = currentGameState
   private val undoStack: ListBuffer[PlaceBetCommand] = ListBuffer.empty
@@ -49,4 +51,14 @@ class GameController extends ControllerInterface {
     currentGameState = state
     notifyObservers(BetUndone)
   }}
+
+  override def save(): Unit = {
+    currentGameState.foreach(fileIo.save)
+  }
+
+  override def load(): Unit = {
+    val loadedState = fileIo.load
+    currentGameState = Some(loadedState.asInstanceOf[GameState])
+    notifyObservers(NewRound(loadedState))
+  }
 }

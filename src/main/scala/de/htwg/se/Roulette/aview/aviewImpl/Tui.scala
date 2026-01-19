@@ -13,6 +13,8 @@ class Tui @Inject() (controller: ControllerInterface) {
         input.trim.toLowerCase.split("\\s+").toList match {
           case "new" :: Nil => controller.startRound()
           case "undo" :: Nil => controller.undo()
+          case "save" :: Nil => controller.save()
+          case "load" :: Nil => controller.load()
           case "quit" :: Nil => sys.exit(0)
           case betStrings =>
             val bets = Bet(betStrings.mkString(" "))
