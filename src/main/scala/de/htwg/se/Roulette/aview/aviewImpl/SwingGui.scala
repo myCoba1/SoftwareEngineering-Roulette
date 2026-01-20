@@ -78,26 +78,26 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame
   }
 
   private[aviewImpl] val redBetButton = ButtonFactory.createBetButton("RED", Color.RED, Color.WHITE)
-  private val blackBetButton = ButtonFactory.createBetButton("BLACK", Color.BLACK, Color.WHITE)
-  private val lowBetButton = ButtonFactory.createBetButton("1-18", Color.LIGHT_GRAY)
-  private val highBetButton = ButtonFactory.createBetButton("19-36", Color.LIGHT_GRAY)
-  private val firstDozenBetButton = ButtonFactory.createBetButton("1-12", Color.LIGHT_GRAY)
-  private val secondDozenBetButton = ButtonFactory.createBetButton("13-24", Color.LIGHT_GRAY)
-  private val thirdDozenBetButton = ButtonFactory.createBetButton("25-36", Color.LIGHT_GRAY)
-  private val evenBetButton = ButtonFactory.createBetButton("EVEN", Color.LIGHT_GRAY)
-  private val oddBetButton = ButtonFactory.createBetButton("ODD", Color.LIGHT_GRAY)
+  private[aviewImpl] val blackBetButton = ButtonFactory.createBetButton("BLACK", Color.BLACK, Color.WHITE)
+  private[aviewImpl] val lowBetButton = ButtonFactory.createBetButton("1-18", Color.LIGHT_GRAY)
+  private[aviewImpl] val highBetButton = ButtonFactory.createBetButton("19-36", Color.LIGHT_GRAY)
+  private[aviewImpl] val firstDozenBetButton = ButtonFactory.createBetButton("1-12", Color.LIGHT_GRAY)
+  private[aviewImpl] val secondDozenBetButton = ButtonFactory.createBetButton("13-24", Color.LIGHT_GRAY)
+  private[aviewImpl] val thirdDozenBetButton = ButtonFactory.createBetButton("25-36", Color.LIGHT_GRAY)
+  private[aviewImpl] val evenBetButton = ButtonFactory.createBetButton("EVEN", Color.LIGHT_GRAY)
+  private[aviewImpl] val oddBetButton = ButtonFactory.createBetButton("ODD", Color.LIGHT_GRAY)
 
   private val specialBetButtons = List(redBetButton, blackBetButton, lowBetButton, highBetButton, firstDozenBetButton, 
                                         secondDozenBetButton, thirdDozenBetButton, evenBetButton, oddBetButton)
 
-  private val zeroButton = ButtonFactory.createZeroButton()
+  private[aviewImpl] val zeroButton = ButtonFactory.createZeroButton()
 
-  private val numberButtons = (1 to 36).map(ButtonFactory.createNumberButton)
+  private[aviewImpl] val numberButtons = (1 to 36).map(ButtonFactory.createNumberButton)
 
-  private val lineOne = ButtonFactory.createLineButton()
-  private val lineTwo = ButtonFactory.createLineButton()
-  private val lineThree = ButtonFactory.createLineButton()
-  private val lineButtons = List(lineOne, lineTwo, lineThree)
+  private[aviewImpl] val lineOne = ButtonFactory.createLineButton()
+  private[aviewImpl] val lineTwo = ButtonFactory.createLineButton()
+  private[aviewImpl] val lineThree = ButtonFactory.createLineButton()
+  private[aviewImpl] val lineButtons = List(lineOne, lineTwo, lineThree)
 
   contents = new BoxPanel(Orientation.Vertical) {
     contents += new FlowPanel(winningNumberLabel)

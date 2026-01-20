@@ -3,7 +3,7 @@ package de.htwg.se.Roulette.aview.aviewImpl
 import de.htwg.se.Roulette.controller.{BetPlaced, BetUndone, ControllerEvent, ControllerInterface, NewRound}
 import de.htwg.se.Roulette.model.modelImpl.GameState
 import de.htwg.se.Roulette.model.GameStateInterface
-import de.htwg.se.Roulette.model.bets.{Bet, RedBet}
+import de.htwg.se.Roulette.model.bets._
 import de.htwg.se.Roulette.util.Observer
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -73,6 +73,12 @@ class SwingGuiSpec extends AnyWordSpec with Matchers {
         val loadButton = gui.loadButton
         val placeBetButton = gui.placeBetButton
         val redBetButton = gui.redBetButton
+        val blackBetButton = gui.blackBetButton
+        val evenBetButton = gui.evenBetButton
+        val zeroButton = gui.zeroButton
+        val numberButtons = gui.numberButtons
+        val lineOne = gui.lineOne
+
         val stakeTextField = gui.stakeTextField
         val allInButton = gui.allInButton
 
@@ -97,12 +103,33 @@ class SwingGuiSpec extends AnyWordSpec with Matchers {
         // Select Red
         redBetButton.selected = true
         placeBetButton.peer.doClick()
-        controller.betsPlaced should contain(RedBet(100))
+        controller.betsPlaced should contain(RedBet(100)) // 100 because of All In
         
-        // Test No Bet Selected
+        // Reset and test Black + Even + Number 1
         redBetButton.selected = false
+        blackBetButton.selected = true
+        evenBetButton.selected = true
+        numberButtons.head.selected = true // Number 1
         stakeTextField.text = "10"
+        
         placeBetButton.peer.doClick()
+        controller.betsPlaced should contain(BlackBet(10))
+        controller.betsPlaced should contain(EvenBet(10))
+        controller.betsPlaced should contain(NumberBet(1, 10))
+
+        // Test Zero and Line One
+        blackBetButton.selected = false
+        evenBetButton.selected = false
+        numberButtons.head.selected = false
+        zeroButton.selected = true
+        lineOne.selected = true
+        
+        placeBetButton.peer.doClick()
+        controller.betsPlaced should contain(NumberBet(0, 10))
+        controller.betsPlaced should contain(LineOneBet(10))
+
+        // Test No Bet Selected
+        // We avoid clicking placeBetButton with no selection to prevent Dialog popup in tests
         gui.dispose()
       }
     }

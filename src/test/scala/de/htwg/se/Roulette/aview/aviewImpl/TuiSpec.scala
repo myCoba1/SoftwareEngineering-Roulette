@@ -2,7 +2,7 @@ package de.htwg.se.Roulette.aview.aviewImpl
 
 import de.htwg.se.Roulette.controller.{ControllerEvent, ControllerInterface}
 import de.htwg.se.Roulette.model.GameStateInterface
-import de.htwg.se.Roulette.model.bets.{Bet, RedBet}
+import de.htwg.se.Roulette.model.bets.{Bet, BlackBet, NumberBet, RedBet}
 import de.htwg.se.Roulette.util.Observer
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -76,6 +76,14 @@ class TuiSpec extends AnyWordSpec with Matchers {
       tui.currentStake = 10
       tui.processInput("red")
       controller.placedBets should contain(RedBet(10))
+    }
+
+    "place multiple bets on valid input" in {
+      tui.currentStake = 20
+      tui.processInput("red black 10")
+      controller.placedBets should contain(RedBet(20))
+      controller.placedBets should contain(BlackBet(20))
+      controller.placedBets should contain(NumberBet(10, 20))
     }
 
     "print an error message on invalid input" in {
