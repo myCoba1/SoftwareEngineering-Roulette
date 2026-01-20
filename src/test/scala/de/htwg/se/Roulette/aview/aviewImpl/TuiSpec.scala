@@ -88,8 +88,8 @@ class TuiSpec extends AnyWordSpec with Matchers {
 
     "place various other bet types on valid input" in {
       tui.currentStake = 30
-      // Assuming TUI recognizes keywords like 'even', 'low', '1/3'
-      tui.processInput("even low 1/3")
+      // Assuming TUI recognizes keywords like 'even', '1/2', '1/3'
+      tui.processInput("even 1/2 1/3")
       controller.placedBets should contain(EvenBet(30))
       controller.placedBets should contain(FirstHalfBet(30))
       controller.placedBets should contain(FirstThirdBet(30))
