@@ -9,7 +9,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import scala.util.{Success, Try}
 import java.awt.GraphicsEnvironment
-import scala.swing.{Button, TextField, ToggleButton}
+import scala.swing.{Button, Label, TextField, ToggleButton}
 
 class SwingGuiSpec extends AnyWordSpec with Matchers {
 
@@ -50,16 +50,36 @@ class SwingGuiSpec extends AnyWordSpec with Matchers {
         gui.dispose()
       }
 
-      "handle update events safely" in {
+      "update its UI based on controller events" in {
         val controller = new MockController
         val gui = new SwingGui(controller)
-        // We verify that the update method processes events without throwing exceptions.
-        // Assuming GameState(winningNumber: Int, bets: List[Bet]) structure based on usage.
-        val mockGameState = GameState(0, List())
-        
-        noException should be thrownBy gui.update(NewRound(mockGameState))
-        noException should be thrownBy gui.update(BetPlaced(mockGameState))
-        noException should be thrownBy gui.update(BetUndone)
+
+        // Test NewRound event
+        val newRoundState = GameState(0, List(), 500)
+        gui.update(NewRound(newRoundState))
+        gui.balanceLabel.text should be("Balance: 500")
+        gui.winningNumberLabel.text should be("Place your bets!")
+        gui.betsLabel.text should be("Bets: ")
+        gui.placeBetButton.enabled should be(true)
+        gui.newRoundButton.enabled should be(false)
+
+        // Test BetPlaced event
+        val bet = RedBet(10)
+        val betPlacedState = GameState(winningNumber = 7, bets = List(bet), balance = 490)
+        gui.update(BetPlaced(betPlacedState))
+        gui.balanceLabel.text should be("Balance: 490")
+        gui.winningNumberLabel.text should be("Winning Number: 7")
+        gui.betsLabel.text should be("Bets: Red (10)")
+        gui.placeBetButton.enabled should be(false)
+        gui.newRoundButton.enabled should be(true)
+
+        // Test BetUndone event
+        gui.update(BetUndone)
+        gui.balanceLabel.text should be("Balance: 100") // from mock controller's gameState
+        gui.winningNumberLabel.text should be("Place your bets!")
+        gui.betsLabel.text should be("Bets: ") // mock controller has empty bets list
+        gui.placeBetButton.enabled should be(true)
+        gui.newRoundButton.enabled should be(false)
         gui.dispose()
       }
       

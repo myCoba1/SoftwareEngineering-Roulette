@@ -17,9 +17,9 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame
   controller.addObserver(this)
 
   title = "Roulette"
-  private val winningNumberLabel = new Label("Winning Number: -")
-  private val betsLabel = new Label("Bets: ")
-  private val balanceLabel = new Label("Balance: 100")
+  private[aviewImpl] val winningNumberLabel = new Label("Winning Number: -")
+  private[aviewImpl] val betsLabel = new Label("Bets: ")
+  private[aviewImpl] val balanceLabel = new Label("Balance: 100")
   private var currentBalance: Int = 100
   private[aviewImpl] val stakeTextField = new TextField("10") { columns = 5 }
   private[aviewImpl] val allInButton = new Button("All In")
