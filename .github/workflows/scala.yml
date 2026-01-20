@@ -26,6 +26,12 @@ jobs:
       - name: Set up sbt
         uses: sbt/setup-sbt@v1
 
+      - name: install dependancies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libxtst6 libxrender1
+          
+
       - name: Run tests and Submit to Coveralls
         run: sbt clean coverage test coverageAggregate coveralls
         env:
