@@ -33,7 +33,7 @@ jobs:
           
 
       - name: Run tests and Submit to Coveralls
-        run: sbt clean coverage test coverageAggregate coveralls
+        run: xvfb-run sbt clean coverage test coverageAggregate coveralls
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
