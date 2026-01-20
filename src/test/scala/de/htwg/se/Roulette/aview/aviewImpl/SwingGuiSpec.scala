@@ -81,6 +81,14 @@ class SwingGuiSpec extends AnyWordSpec with Matchers {
         gui.placeBetButton.enabled should be(true)
         gui.newRoundButton.enabled should be(false)
         gui.dispose()
+
+        // Test BetPlaced event with game over
+        val gameOverState = GameState(winningNumber = 7, bets = List(bet), balance = 0)
+        // This may show a dialog. We just check that the update completes and state is correct.
+        gui.update(BetPlaced(gameOverState))
+        gui.balanceLabel.text should be("Balance: 0")
+        // Check that game over dialog does not block test execution.
+
       }
       
       "react to buttons" in {
@@ -98,6 +106,14 @@ class SwingGuiSpec extends AnyWordSpec with Matchers {
         val zeroButton = gui.zeroButton
         val numberButtons = gui.numberButtons
         val lineOne = gui.lineOne
+        val lineTwo = gui.lineTwo
+        val lineThree = gui.lineThree
+        val lowBetButton = gui.lowBetButton
+        val highBetButton = gui.highBetButton
+        val firstDozenBetButton = gui.firstDozenBetButton
+        val secondDozenBetButton = gui.secondDozenBetButton
+        val thirdDozenBetButton = gui.thirdDozenBetButton
+        val oddBetButton = gui.oddBetButton
 
         val stakeTextField = gui.stakeTextField
         val allInButton = gui.allInButton
@@ -148,8 +164,82 @@ class SwingGuiSpec extends AnyWordSpec with Matchers {
         controller.betsPlaced should contain(NumberBet(0, 10))
         controller.betsPlaced should contain(LineOneBet(10))
 
+        // Test other special bets
+        zeroButton.selected = false
+        lineOne.selected = false
+        stakeTextField.text = "5"
+
+        lowBetButton.selected = true
+        highBetButton.selected = true
+        firstDozenBetButton.selected = true
+        secondDozenBetButton.selected = true
+        thirdDozenBetButton.selected = true
+        oddBetButton.selected = true
+        lineTwo.selected = true
+        lineThree.selected = true
+
+        placeBetButton.peer.doClick()
+        controller.betsPlaced should contain allOf (
+          FirstHalfBet(5),
+          SecondHalfBet(5),
+          FirstThirdBet(5),
+          SecondThirdBet(5),
+          ThirdThirdBet(5),
+          OddBet(5),
+          LineTwoBet(5),
+          LineThreeBet(5)
+          )
+
         // Test No Bet Selected
         // We avoid clicking placeBetButton with no selection to prevent Dialog popup in tests
+        gui.dispose()
+      }
+
+      "handle place bet errors" in {
+        val controller = new MockController
+        val gui = new SwingGui(controller)
+        val placeBetButton = gui.placeBetButton
+        val stakeTextField = gui.stakeTextField
+
+        // Test with no bet selected - This will show a dialog, we just check no bets are placed
+        controller.betsPlaced = List() // reset
+        placeBetButton.peer.doClick()
+        controller.betsPlaced should be (empty)
+
+        // Test with invalid stake (non-integer)
+        stakeTextField.text = "abc"
+        gui.redBetButton.selected = true
+        placeBetButton.peer.doClick()
+        controller.betsPlaced should be (empty)
+        gui.redBetButton.selected = false
+
+        // Test with negative stake
+        stakeTextField.text = "-10"
+        gui.redBetButton.selected = true
+        placeBetButton.peer.doClick()
+        controller.betsPlaced should be (empty)
+        gui.redBetButton.selected = false
+
+        // Test with stake > balance
+        stakeTextField.text = "101" // balance is 100
+        gui.redBetButton.selected = true
+        placeBetButton.peer.doClick()
+        controller.betsPlaced should be (empty)
+        gui.redBetButton.selected = false
+
+        gui.dispose()
+      }
+
+      "handle BetUndone event when gameState is None" in {
+        class MockControllerWithNoState extends MockController {
+          override def gameState: Option[GameStateInterface] = None
+        }
+        val controller = new MockControllerWithNoState
+        val gui = new SwingGui(controller)
+
+        // The update should do nothing and not throw an exception
+        noException should be thrownBy gui.update(BetUndone)
+
         gui.dispose()
       }
     }
