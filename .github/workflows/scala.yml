@@ -29,9 +29,12 @@ jobs:
       - name: install dependancies
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb libxtst6 libxrender1
-          
+          sudo apt-get install -y xvfb libxtst6 libxrender
 
+      - name: Debug coverage files
+        run: |
+          find . -name "*.xml" -o -name "*.lcov"
+    
       - name: Run tests and Submit to Coveralls
         run: xvfb-run sbt clean coverage test coverageAggregate coveralls
         env:
