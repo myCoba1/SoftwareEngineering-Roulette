@@ -15,6 +15,9 @@ lazy val root = (project in file("."))
     assembly / mainClass := Some("de.htwg.se.Roulette.RouletteApp")
   )
 
+Test / fork := true
+Test / javaOptions += "-Dtesting=true"
+
 coverageEnabled := true
 coverageFailOnMinimum := false
 coverageMinimumStmtTotal := 0

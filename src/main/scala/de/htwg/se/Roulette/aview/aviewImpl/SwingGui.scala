@@ -177,14 +177,14 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame
             specialBetButtons.foreach(_.selected = false)
             lineButtons.foreach(_.selected = false)
           } else {
-            Dialog.showMessage(contents.head, "No number selected.", "Error")
+            showTestableMessage(contents.head, "No number selected.", "Error")
           }
         case Some(stake) if stake <= 0 =>
-          Dialog.showMessage(contents.head, "Stake must be positive.", "Error")
+          showTestableMessage(contents.head, "Stake must be positive.", "Error")
         case Some(stake) if stake > currentBalance =>
-          Dialog.showMessage(contents.head, s"You only have $currentBalance.", "Error")
+          showTestableMessage(contents.head, s"You only have $currentBalance.", "Error")
         case None =>
-          Dialog.showMessage(contents.head, "Please enter a valid integer stake.", "Error")
+          showTestableMessage(contents.head, "Please enter a valid integer stake.", "Error")
       }
     case ButtonClicked(`newRoundButton`) =>
       controller.startRound()
@@ -192,7 +192,7 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame
       controller.undo()
     case ButtonClicked(`saveButton`) =>
       controller.save()
-      Dialog.showMessage(contents.head, "Game Saved.", "Info")
+      showTestableMessage(contents.head, "Game Saved.", "Info")
     case ButtonClicked(`loadButton`) =>
       controller.load()
     case ButtonClicked(`quitButton`) =>
@@ -218,7 +218,7 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame
         betsLabel.text = s"Bets: ${gs.bets.mkString(", ")}"
         balanceLabel.text = s"Balance: ${gs.balance}"
         if (gs.balance <= 0) {
-          Dialog.showMessage(contents.head, "Game Over! You ran out of money.", "Game Over")
+          showTestableMessage(contents.head, "Game Over! You ran out of money.", "Game Over")
         }
         placeBetButton.enabled = false
         newRoundButton.enabled = true
@@ -241,6 +241,15 @@ class SwingGui @Inject() (controller: ControllerInterface) extends MainFrame
             lineButtons.foreach(_.enabled = true)
           case None =>
         }
+    }
+  }
+
+  private def showTestableMessage(parent: scala.swing.Component, message: String, title: String): Unit = {
+    if (sys.props.get("testing").contains("true")) {
+      // In test, just print to console to avoid blocking
+      println(s"DIALOG: [$title] $message")
+    } else {
+      Dialog.showMessage(parent, message, title)
     }
   }
 
