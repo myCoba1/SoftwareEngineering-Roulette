@@ -13,8 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history to avoid missing files
-          submodules: recursive  # Clone submodules if any
+          fetch-depth: 0
+          submodules: recursive
 
       - name: Set up JDK 11
         uses: actions/setup-java@v4
@@ -26,16 +26,22 @@ jobs:
       - name: Set up sbt
         uses: sbt/setup-sbt@v1
 
-      - name: install dependancies
+      - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb libxtst6 libxrender1
 
-      - name: Verify coverage file exists
-        run: |
-          ls -R target | grep scoverage || true
+      - name: Run tests with coverage
+        run: xvfb-run sbt clean coverage test coverageAggregate
 
-      - name: Run tests and Submit to Coveralls
-        run: xvfb-run sbt clean coverage test coverageAggregate coveralls
+      - name: Verify coverage output
+        run: |
+          pwd
+          ls
+          ls -R target || true
+          find . -name "scoverage.xml" || true
+
+      - name: Submit coverage to Coveralls
+        run: sbt coveralls
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
