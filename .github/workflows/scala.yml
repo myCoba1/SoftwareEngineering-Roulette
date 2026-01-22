@@ -31,10 +31,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xvfb libxtst6 libxrender
 
-      - name: Debug coverage files
+      - name: Verify coverage file exists
         run: |
-          find . -name "*.xml" -o -name "*.lcov"
-    
+          ls -R target | grep scoverage || true
+
       - name: Run tests and Submit to Coveralls
         run: xvfb-run sbt clean coverage test coverageAggregate coveralls
         env:
