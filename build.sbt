@@ -11,7 +11,8 @@ libraryDependencies += "org.playframework" %% "play-json" % "3.0.4"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "Roulette"
+    name := "Roulette",
+    assembly / mainClass := Some("de.htwg.se.Roulette.RouletteApp")
   )
 
 coverageEnabled := true
