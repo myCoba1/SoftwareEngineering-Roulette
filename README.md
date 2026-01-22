@@ -19,8 +19,6 @@ Key goals of this project:
 ## Coveralls Coverage
 [![Coverage Status](https://coveralls.io/repos/github/myCoba1/SoftwareEngineering-Roulette/badge.svg?branch=main)](https://coveralls.io/github/myCoba1/SoftwareEngineering-Roulette?branch=main)
 
-<a href='https://coveralls.io/github/myCoba1/SoftwareEngineering-Roulette?branch=main'><img src='https://coveralls.io/repos/github/myCoba1/SoftwareEngineering-Roulette/badge.svg?branch=main' alt='Coverage Status' /></a>
-
 
 ## How to play
 
