@@ -1,0 +1,9 @@
+<gameState>
+    <winningNumber>30</winningNumber>
+    <balance>300</balance>
+    <bets>
+        <bet type="LineThreeBet">
+            <amount>100</amount>
+        </bet>
+    </bets>
+</gameState>
