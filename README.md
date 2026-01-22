@@ -16,7 +16,7 @@ Key goals of this project:
 - **SBT** — build tool for compilation, testing, and dependency management  
 - Testing framework
 
-## Coverage
+## Coveralls Coverage
 [![Coverage Status](https://coveralls.io/repos/github/myCoba1/SoftwareEngineering-Roulette/badge.svg?branch=main)](https://coveralls.io/github/myCoba1/SoftwareEngineering-Roulette?branch=main)
 
 
